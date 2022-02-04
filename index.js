@@ -1,12 +1,19 @@
-const express = require("express");
+const express = require('express')
+const path = require('path')
+const PORT = process.env.PORT || 5000
 const { google } = require("googleapis");
 var request = require('request');
 var JFile = require('jfile');
 const fs = require('fs');
 
 const app = express();
-app.set("view engine", "ejs");
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.get('/', (req, res) => res.render('pages/index'));
+app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+
 
 let JFILE = new JFile("./log.txt");
 let TOTAL_ORDERS = [] //JFILE.lines
@@ -20,12 +27,8 @@ let WHITELIST = [
     "Forwarded Outlook/Microsoft Accounts"
 ]
 
-app.post("/", (req, res) => {
-    res.send("Hi");
-});
 
-app.get("/", async(req, res) => {
-
+app.get("/test", async(req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -39,10 +42,7 @@ app.get("/", async(req, res) => {
 
     res.redirect("https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/edit#gid=0");
 
-})
-
-app.listen(1337, (req, res) => console.log("Running on port 1337"));
-
+});
 
 async function getOrders() {
     var options = {
