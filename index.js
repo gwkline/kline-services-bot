@@ -21,10 +21,10 @@ let WHITELIST = [
 ]
 
 app.post("/", (req, res) => {
-    res.render("index");
+    res.send("Hi");
 });
 
-app.get("/test", async(req, res) => {
+app.get("/", async(req, res) => {
 
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
