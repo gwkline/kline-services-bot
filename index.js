@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 let JFILE = new JFile("./log.txt");
-let TOTAL_ORDERS = [] //JFILE.lines
+let TOTAL_ORDERS = JFILE.lines
 let UPDATE_LOG = []
 let WHITELIST = [
     "Fresh BestBuy Accounts",
@@ -27,10 +27,6 @@ let WHITELIST = [
 ]
 
 app.get("/", async(req, res) => {
-    res.send("Hi")
-});
-
-app.get("/test", async(req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
