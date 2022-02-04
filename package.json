@@ -16,6 +16,7 @@
         "fs": "^0.0.1-security",
         "googleapis": "^95.0.0",
         "jfile": "^1.1.12",
+        "node-fetch": "^3.2.0",
         "request": "^2.88.2"
     },
     "devDependencies": {
