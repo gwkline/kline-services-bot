@@ -27,6 +27,9 @@ let WHITELIST = [
     "Forwarded Outlook/Microsoft Accounts"
 ]
 
+app.get("/", async(req, res) => {
+    res.send("Hi")
+});
 
 app.get("/test", async(req, res) => {
     async function sleep(ms) {
