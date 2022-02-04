@@ -18,6 +18,7 @@
     },
     "homepage": "https://github.com/gwkline/kline-services-bot#readme",
     "dependencies": {
+        "express": "^4.17.2",
         "jfile": "^1.1.12",
         "request": "^2.88.2"
     }
