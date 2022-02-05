@@ -26,7 +26,45 @@ let WHITELIST = [
     "Forwarded Outlook/Microsoft Accounts"
 ]
 
-app.get("/", async(req, res) => {
+
+app.get('/', (req, res) => {
+
+    res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+
+    // if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
+    //     console.log("Valid Cookie");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    // } else if (req.cookies.id_token == "invalid") {
+    //     console.log("Not in server");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    //     //non_member_index.html
+    // } else {
+    //     console.log("Needs login token");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    //     //loginindex.html
+    // }
+});
+
+
+// // Routes
+// app.use('/api/discord', require('.discordauth/api/discord.js'));
+
+// app.use((err, req, res, next) => {
+//     switch (err.message) {
+//         case 'NoCodeProvided':
+//             return res.status(400).send({
+//                 status: 'ERROR',
+//                 error: err.message,
+//             });
+//         default:
+//             return res.status(500).send({
+//                 status: 'ERROR',
+//                 error: err.message,
+//             });
+//     }
+// });
+
+app.get("/api/refresh", async(req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }

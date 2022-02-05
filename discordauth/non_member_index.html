@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kline Accounts</title>
+    <link rel="icon" type="image/png" href="static/img/favicon.ico"/>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css"/>
+    <script src="https://kit.fontawesome.com/37fc19408d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://shoppy.gg/api/embed.js"></script>
+    <link rel="stylesheet" href="https://use.typekit.net/fgd4drs.css">
+
+    <script src="main.js" type="text/javascript"></script>
+    <script src="index.js" type="module"></script>
+</head>
+<body>
+    <ul class="navbar">
+        <img class="logo-image" src="./Images/logomark.svg">
+        <a href="#about" id="idabout">About</a>
+        <a href="#accounts">Accounts</a>
+        <a href="#faq">FAQ</a>
+        <a href="#success">Success</a>
+        <a href="/api/discord/login" style="padding: 0 !important;">
+                <img href="/api/discord/login" class="discordpfp" src="Images/discord.svg">
+        </a>
+    </ul>
+    <div class="hero">
+        <div data-aos="fade-right" class="lefthero">
+            <img class="long-logo" src="./Images/wordmark copy.svg">
+            <img class="gotem" id="phne" src="Images/phne.svg">
+        </div>
+        <div data-aos="fade-left" class="righthero">
+                <div class="line1">Always</div>
+                <div class="secondline line2">GOT 'EM</div>
+                <div class="paragraph">Kline Accounts hit Nike SNKRS, win raffles, and get one-clicks.</div>
+                <a href="#accounts" type="button" class="learn-more-btn">View Accounts</a>
+        </div>
+    </div>
+
+    <div id="about" class="features" style="padding-bottom: 400px;">
+        <div data-aos="fade-up" class="text">
+            <div class="firstline">This is why</div>
+            <div class="secondline">WE'RE THE BEST</div>
+            <div class="bottomtext" style="padding-bottom: 50px;">Fast, personal, and helpful customer services.<br>
+                Warranties that show we stand by our products.<br>
+                Kline Services offers the best account on the market, hands down.</div>
+        </div>
+        <div data-aos="fade-up" class="feature-cards">
+            <div class="feat">
+                <div class="fcard-1 fcard">
+                    <div class="topclock">
+                        <svg class="t1 t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="116.28" height="116.28" viewBox="0 0 116.28 116.28">
+                            <circle id="Ellipse_3" data-name="Ellipse 3" cx="58.14" cy="58.14" r="58.14" fill="#181b22"/>
+                            <image id="icons8_speed_100px" width="66" height="51" transform="translate(24.64 29.01)" xlink:href="data:image/png;base64,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"/>
+                        </svg>
+                        </div>
+                    <div class="fcard-title">Human-like Generation Methods</div>
+                    <div class="fcard-desc">All of our accounts are created using the most human-like methods possible. We take precautions to prevent being detected by Nike, Google, and retail sites to keep your accounts as healthy as possible.</div>
+                </div>
+            </div>
+            <div class="feat">
+                <div class="fcard-2 fcard">
+                    <div class="topclock">
+                            <svg class="t1 t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="116.28" height="116.28" viewBox="0 0 116.28 116.28">
+                                <circle id="Ellipse_3" data-name="Ellipse 3" cx="58.14" cy="58.14" r="58.14" fill="#181b22"/>
+                                <image id="icons8_speed_100px" width="66" height="51" transform="translate(24.64 29.01)" xlink:href="data:image/png;base64,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"/>
+                            </svg>
+                        </div>
+                    <div class="fcard-title">Unique Region-Based IPs</div>
+                    <div class="fcard-desc">Our accounts are created on unique IPs specific to the account's region, and IPs will never be reused. This adds another layer of protection against bot detection and prevents unnecessary clipping.</div>
+                </div>
+            </div>
+            <div class="feat">
+                <div class="fcard-3 fcard">
+                    <div class="topclock">
+                            <svg class="t1 t" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="116.28" height="116.28" viewBox="0 0 116.28 116.28">
+                                <circle id="Ellipse_3" data-name="Ellipse 3" cx="58.14" cy="58.14" r="58.14" fill="#181b22"/>
+                                <image id="icons8_speed_100px" width="66" height="51" transform="translate(24.64 29.01)" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAzCAYAAAAjKt6MAAAABHNCSVQICAgIfAhkiAAAB5lJREFUaEPVm3WMH0UUxzncCW4BigUori1+QEII7k5SpCHB3YocLsUl/APFilsJhBKkPdwpUqzYYaW4FCnO93OZbeaW+e28md/e79qXfPO73X3zZubtzLPZa5vYf69pWkArqI91hWWFJYSFhDmFmYXZXP+/6HeS8JPwhfCx8J7wnPB2b4+xrZcUsYgGvpKwlbCZsLgwR+ZkJqrdJ8KjwoPCq8JXmbIaNqtbEf3V037CrsJidQ/WyftAv/cIw4R36uqjLkWsrQEdIWwhzFPX4CJyvtPzB4RL3CppqttmFTG/ej9KOFaYrqmR5Df+U00vEC4Tvs4V04widlKn5wnL5HZec7v3Je844d4cuTmKmNG9gcNzOmxBm0udQlgpZkpVBO7vGmEjcw99w9ipbjHaH1m7T1HEOhKKccIu1Em4RyjXvTYaywQ92FZ40TJYqyLWkrD7BOKDuuh3CTpZuN4J3Fe/ZwlsvbrocwnaTng5JtCiiFUk5DFhvpiwxOe4Wyy9T0fq4uJEOTH2b8SwiTC2ijGmiH5q3CkQFqcQhupLgVB6+kBDwmmiTWIBn+bVBVHkrIE2bCHC70VTBuJ4sRXtTnaweZUiWKKPCwMTO35K/Cx5liOB1jkBGSiCyPN7oyJuc3LIPzYXcNtLJ47rGaeMoDepUsRVanhQYmckR2sIJE8FkVi9LuBxfCIIu7B0jzjg/NK9kbresnRveV0/L5C4pdCVYj401KCRIrC2GMdUOkMNTgs04g0eX7r/r66xCQ+5+0w2ZB920/07AjLv172tUwco/m0EvF8PCikCN4ZhYQ+nUooiCtm/uT9madDZ7rp/e+AZL4oXlkpdarCy8LPfMKSIoWI4JlW64x+nX+wCRq2gufTHS0JuKP6I2mIXfFpNF9iiopaROly23wlVilhOD8n32de5RN2gQyBdxqCxSjbNFeba3aBfXC2eiLdJGI2dyKVf1XB1gRfXTeUVQY5PYFMHdUlIvzoEORkEYCgiZ8uGhnGtbh4QUgRW/Q1hJsPgKaEVWd4O+rvsEQwiamUhxrhaYEUTSVoIz8bqImvtsSLO1DX+P0bPigHL+61jJAjCCqfGG7F+rM+pVp0tvOIU8ZrxZSL/dKHDVwTR37vCUpHe/9Zz4gTiAp9W1QUBVCuLMyRTuGriDJ+oWBG+W4jVQGH5r8JGUGT9n28NSMIbkHgRGfo0uy7GC3VnkKHJdOkmkyU4+ifAQHbMqljYognxEL+MLBRhNZJ0TDpezuZwmZTdpzV2nsPGnmbyFwmk2FW0ox7eJbQZOqK+MhhFwMzEcCcWGi0mor2iPriA/ibgabc0zuTBDpwqvGlsTxnxVmEGA393ToQiSLN5m40iu5CsD3XzJqfxffS7pKHDHJZONSJ+GGFsvJ74KCFynGAlYooBKGJvNylrwzr52GoMBMLOFEQqTmWaxM9C2IWThEOEUNofk7EnisBl4jpbSeQX7M07BaI7EjB8+oECqTljspTmiXkGC2StzRwoDUER10nIoBZqoUt97SKQfzRDBHJktAOaEeLaDkMRnbrY2CiMEBfjioHMoT9cX9ikXGLlYDh3rhDA2SirbEFjJ6NRxBgxk81VEUuZKOxGp4g99EuhNTU5u0JtDjMOrsxG2Y9TNdo3SgMYJ9sKjwENckqLjXMMimCPxnIFOmcSPh2ti3KFKTZHwnAqS6lE/yghVjuFh2DLJ9qWi8Tl/sehCEreVWV6EhqSGb5Z8GluXXwmhAqtoYn+qJu4ajyChQjOSN9ZeRY7gPehsPtDSThzI33wvVK5//Eogiitai8RTrNiWq0IvIBVaUyMcaIIFO4TimDVVxVxJqAIKsOxHJ+KFaGtT0Pc27K83YKHN/uCscEG4nvSyFuwnag/qI/6xNipulVRF4qgPrlihBFrTyfUCfEaFE2xD6nZJvuXfWyhy8UUrDhXNKZUz8T5sgavsb3AcULs9GwsihglRk6CLESQgyJyT71QKPv+6Uhn6+s5OY0lVwiJ4nQLRVjPaUehCHIGwuxWEek6MQAFnhBtqJuU73GXraLhKIL4gACllUT9EXfMmUbxxRzfX1EbOFiILeW6x9qBIvi+cHjdkhPkfep4m8kVEroLsnYnXdQhCHlT3gLu6GEBe8GZQywga3agvdmegs9AFIECSICI4S3EwTDWuAhcCKyoF/TlVzScpdziBs8K59tOK1HW6y7M0ICUeH9DS4q3awo09olcBWWmulNDl1EWqmNMgrFB1CNuFqzFmcmlOhpzFmCpAhG1Eb31ZfHW1wxxA0a2+2zCI7bqW04pMU2Szo8oVgTZHPs+FmGidYq3nCH4xCohYuzN4m1oQrwYjGzxHVbBQzWdHCpWVSeEJ4+a5B/5hY7uQ51jI1h2xffQ5Cn4/b6wEQRN7cITpYFyj0AxVsU+VzyU+HqcdHGoyt63eA8OeIvvJzCcsYOhkELrusfxI1VrjishMty7hdjpO96Cg6nug+DyITAFDb5HmNqILULYzgqgks2nCDHCoE6OqMuKYL+g2dwYP9b5lPIcI8u/UTT8LICBWg+Dp5RJ5YyDYs8pfsNG31BhRHCpfKzF2QNGaWomtgwgCOSMl5JCD/oPwIGoF+Q765wAAAAASUVORK5CYII="/>
+                            </svg>
+                        </div>
+                    <div class="fcard-title">Top Tier Customer Service</div>
+                    <div class="fcard-desc">Kline Services prides itself on the quality products we offer to our customers. If you ever have any questions or issues, we will work to make sure you stay satisfied with the accounts you order.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cards">
+            <div class="outer">
+                <div class="card" style="--delay: -1;">
+                    <div class="card-header">
+                        <img src="Images/jug.png" class="profile-pic">
+                        <div class="leftpfp-info">
+                            <div class="profile-un">Jug Flyswater#2098</div>
+                            <div class="stars">
+                                <img class="star filled" src="./Images/star.svg">
+                                <img class="star filled" src="./Images/star.svg">
+                                <img class="star filled" src="./Images/star.svg">
+                                <img class="star filled" src="./Images/star.svg">
+                                <img class="star filled" src="./Images/star.svg">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-desc">
+                        Kline Edu gmails are the only reason why I copped on yeezy day was able to pass splash no problem. Also the SNKRS accounts work like a charm.
+                    </div>
+                </div>
+              <div class="card" style="--delay: 0;">
+                <div class="card-header">
+                    <img src="Images/hass.png" class="profile-pic">
+                    <div class="leftpfp-info">
+                        <div class="profile-un">hass#2084</div>
+                        <div class="stars">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-desc">
+                    Copped my first PE win with Kline Accounts for AJ1 Pollen Mens.  Bought 5 farmed gmail accounts a month or so ago and that one hit today.  Bought 50 more within the past few week, hoping the success continues!
+                </div>
+                </div>
+              <div class="card" style="--delay: 1;">
+                <div class="card-header">
+                    <img src="Images/wallacebrown.gif" class="profile-pic">
+                    <div class="leftpfp-info">
+                        <div class="profile-un">wallacebrown#7245</div>
+                        <div class="stars">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-desc">
+                    Kline Accounts has provided accounts for me that have been hitting consistently. He always delivers on time and he and his staff respond super quickly when I have questions or any issues.
+                </div>
+                </div>
+              <div class="card" style="--delay: 2;">
+                <div class="card-header">
+                    <img src="Images/jeff_jayyy.png" class="profile-pic">
+                    <div class="leftpfp-info">
+                        <div class="profile-un">jeff_jayyy#3440</div>
+                        <div class="stars">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-desc">
+                    Kline accounts pride themselves on being one of the best nike account providers, if not the best. They listen to your concerns and seek requests for improvement. Goated products with even better customer service. Don’t hesitate to do business with them! Copped 3 pairs of dunks right after I bought farmed accounts.
+                </div>
+                </div>
+              <div class="card" style="--delay: 2;">
+                <div class="card-header">
+                    <img src="Images/h3.gif" class="profile-pic">
+                    <div class="leftpfp-info">
+                        <div class="profile-un">H3#0031</div>
+                        <div class="stars">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                            <img class="star filled" src="./Images/star.svg">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-desc">
+                    Quality accounts, hit the first time running them, man def cares about every account that is sold.
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="accounts" class="prices">
+        <div data-aos="fade-up" class="text">
+            <div class="firstline">Check out the</div>
+            <div class="secondline">HARDEST HITTING ACCOUNTS</div>
+            <div class="bottomtext">Kline Services offers the highest quality accounts at affordable prices</div>
+        </div>
+        <div data-aos="fade-up" class="pricing">
+            <div class="top-selection">
+                <button onclick="showCard('.yummy-nike')"class="nike-acc site-selection selected">
+                    <img src="./Images/nike.svg" class="selection-logo"/>
+                    <div class="break-line"></div>
+                    <div class="selection-text">Nike</div>
+                </button>
+                <button onclick="showCard('.yummy-gmail')"class="gmail-acc site-selection">
+                    <img style="width: 30px;" src="./Images/gmail.svg" class="selection-logo"/>
+                    <div class="break-line"></div>
+                    <div class="selection-text">Emails</div>
+                </button>
+                <button onclick="showCard('.yummy-combo')"class="combo-acc site-selection">
+                    <img style="width: 35px;" src="./Images/combos.svg" class="selection-logo"/>
+                    <div class="break-line"></div>
+                    <div class="selection-text">Combos</div>
+                </button>
+                <button  onclick="showCard('.yummy-retail')" class="retail-acc site-selection" id="rtail">
+                    <img style="width: 35px;" src="./Images/retail.svg" class="selection-logo"/>
+                    <div class="break-line"></div>
+                    <div class="selection-text">Retail</div>
+                </button>
+            </div>
+
+            <div class="yummy-cards yummy-nike">
+                <div class="nike-bts bottom-selection-nike">
+                    <div class="gm-card nc1">
+                        <div class="nc-logo pd-logo">
+                            <img src="./Images/combologo.svg" alt="">
+                        </div>
+                        <div class="nc-type pd-type">
+                            Fresh Nike
+                        </div>
+                        <div class="nc-price pd-price">
+                            $1.00/account
+                        </div>
+                        <div class="nc-desc pd-desc">
+                            Freshly generated Nike SNKRS accounts created to help maximize your chances of securing pairs on every drop<br>
+                            <br>SMS verified to avoid detection by Nike<br>
+                            <br>Three methods of email access to help fit any and all of your needs<br>
+                            <br>Created using unique, real IP addresses
+                        </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+
+                    <div class="gm-card nc2">
+                        <div class="nc-logo pd-logo">
+                            <img src="./Images/combologo.svg" alt="">
+                        </div>
+                        <div class="nc-type pd-type">
+                            Farmed Nike
+                        </div>
+                        <div class="nc-price pd-price">
+                            $1.75/account
+                        </div>
+                        <div class="nc-desc pd-desc">
+                            SNKRS accounts with human-like activity generated on them to increase odds of success<br>
+                            <br>Generated using the same methods as our fresh accounts<br>
+                            <br>Higher chances of hitting, even the first time you run<br>
+                        </div>
+                        <a href="/api/discord/login" class="rt-btn pd-btn">
+                          <div class="nc-btn-text">
+                              Please join server to purchase
+                          </div>
+                      </a>
+                    </div>
+
+                    <div style="margin: 0px !important" class="gm-card nc2">
+                        <div class="nc-logo pd-logo">
+                            <img src="./Images/combologo.svg" alt="">
+                        </div>
+                        <div class="nc-type pd-type">
+                            Nike Reverification
+                        </div>
+                        <div class="nc-price pd-price">
+                            $0.55/account
+                        </div>
+                        <div class="nc-desc pd-desc">
+                            Add SMS verification to old or clipped accounts to bring them back to life<br>
+                            <br>Made with high quality US and UK SIMs<br>
+                            <br>Save your money and reverify accounts instead of purchasing new ones<br>
+                            <br>
+                        </div>
+                      
+                        <a href="/api/discord/login" class="rt-btn pd-btn">
+                          <div class="nc-btn-text">
+                              Please join server to purchase
+                          </div>
+                      </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="yummy-cards yummy-gmail">
+                <div class="gm-bts bottom-selection-gm">
+                    <div class="gm-top">
+                        <div class="gm-card nc1">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                One-Click Gmail
+                            </div>
+                            <div class="gm-price pd-price">
+                                $9.00/account
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                ReCaptcha v2 One-Click Gmails to help crush any release<br>
+                                <br>SMS verified to avoid detection by Google<br>
+                                <br>Great for sneaker botting or raffles<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                                <div class="nc-btn-text">
+                                    Please join server to purchase
+                                </div>
+                            </a>
+                        </div>
+                        <div class="gm-card nc2">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                Farmed Gmail
+                            </div>
+                            <div class="gm-price pd-price">
+                                $6.00/account
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                Farmed Gmail Accounts perfect for v2 and v3 reCaptcha solving on Shopify and YeezySupply<br>
+                                <br>0.9 v3 reCaptcha score, invisible v2 reCaptcha one-click, and a higher chance (not guarantee) of getting a v2 one-click<br>
+                                <br>SMS verified and created with unique private proxies to prevent clipping<br>
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div style="margin: 0px !important" class="gm-card nc3">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                EDU Gmail
+                            </div>
+                            <div class="gm-price pd-price">
+                                $3.25/account
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                Gmail accounts with a .edu domain which leads to a higher trust score from Google<br>
+                                <br>Better chance at v2 one-clicks than a gmail.com domain<br>
+                                <br>SMS verified to avoid detection by Google<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                    </div>
+                    <div class="gm-bottom">
+                        <div class="gm-card nc4">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                Aged Gmail
+                            </div>
+                            <div class="gm-price pd-price">
+                                $3.25/account
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                Gmail accounts created between 2008-2014 to increase trust with Google and prevent clipping<br>
+                                <br>Better chance at v2 one-clicks, and v3 0.9 scores than a fresh account<br>
+                                <br>SMS verified to avoid detection by Google<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div class="gm-card nc5">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/outlook.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                Forwarded Outlook
+                            </div>
+                            <div class="gm-price pd-price">
+                                $0.40/account
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                Outlook Accounts forwarded to your own master email or catchall<br>
+                                <br>Great for raffle botting<br>
+                                <br>Safe sender list with over 300 white-listed domains to prevent spam<br>
+                                <br>Created using real IP addresses specific to your region and SMS verified
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div style="margin: 0px !important" class="gm-card nc6">
+                            <div class="gm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="gm-type pd-type">
+                                25 Forwarded Gmails
+                            </div>
+                            <div class="gm-price pd-price">
+                                $30.00/pack
+                            </div>
+                            <div class="gm-desc pd-desc">
+                                Packs of 25 Gmails all forwarded to one master Gmail (purchasing multiple quantities will all forward to one master)<br>
+                                <br>IMAP, POP, and Less Secure Apps all enabled<br>
+                                <br>SMS verified to avoid detection by Google<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="yummy-cards yummy-combo">
+                <div class="cm-bts bottom-selection-gm">
+                    <div class="cm-top">
+                        <div class="cm-card nc1">
+                            <div class="cm-logo pd-logo">
+                                <img src="./Images/outlook.svg" alt="">
+                            </div>
+                            <div class="cm-type pd-type">
+                                Fresh Outlook + Nike Combo
+                            </div>
+                            <div class="cm-price pd-price">
+                                $1.80/account
+                            </div>
+                            <div class="cm-desc pd-desc">
+                                Allows you to purchase mass Fresh SNKRS accounts tied to a Outlook account that you have full access to<br>
+                                <br>SMS verified to avoid detection by Microsoft & Nike<br>
+                                <br>Each SNKRS account is tied to a unique Outlook account<br>
+
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div class="cm-card nc2">
+                            <div class="cm-logo pd-logo">
+                                <img src="./Images/outlook.svg" alt="">
+                            </div>
+                            <div class="cm-type pd-type">
+                                Farmed Outlook + Nike Combo
+                            </div>
+                            <div class="cm-price pd-price">
+                                $2.25/account
+                            </div>
+                            <div class="cm-desc pd-desc">
+                                Allows you to purchase mass Farmed SNKRS accounts tied to a Outlook account that you have full access to<br>
+                                <br>SMS verified to avoid detection by Microsoft & Nike<br>
+                                <br>Each SNKRS account is tied to a unique Outlook account<br>
+
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div style="margin: 0px !important" class="cm-card nc3">
+                            <div class="cm-logo pd-logo">
+                                <img src="./Images/gmail1.svg" alt="">
+                            </div>
+                            <div class="cm-type pd-type">
+                                Gmail + Nike Combo
+                            </div>
+                            <div class="cm-price pd-price">
+                                $2.50/account
+                            </div>
+                            <div class="cm-desc pd-desc">
+                                Allows you to purchase mass SNKRS accounts tied to a Gmail account that you have full access to<br>
+                                <br>SMS verified to avoid detection by Google & Nike<br>
+                                <br>Each SNKRS account is tied to a unique Gmail account<br>
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="yummy-cards yummy-retail">
+                <div class="rt-bts bottom-selection-rt">
+                    <div class="rt-top">
+                        <div class="rt-card nc1">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/target.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Fresh Target
+                            </div>
+                            <div class="rt-price pd-price">
+                                $0.75/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Freshly generated Target accounts<br>
+                             
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div class="rt-card nc2">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/walmart2.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Fresh Walmart
+                            </div>
+                            <div class="rt-price pd-price">
+                                $0.75/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Freshly generated Walmart accounts<br>
+                              
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div style="margin: 0px !important" class="rt-card nc3">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/bestbuy.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Fresh BestBuy
+                            </div>
+                            <div class="rt-price pd-price">
+                                $0.75/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Freshly generated BestBuy accounts<br>
+                               
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                    </div>
+                    <div class="rt-bottom">
+                        <div class="rt-card nc4">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/amazon.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Fresh Amazon
+                            </div>
+                            <div class="rt-price pd-price">
+                                $2.75/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Amazon accounts freshly made to order<br>
+                                <br>SMS verified to avoid detection by Amazon<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div class="rt-card nc5">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/amazon.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Aged Amazon
+                            </div>
+                            <div class="rt-price pd-price">
+                                $13.50/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Amazon accounts created between 2008-2016<br>
+                                <br>SMS verified to avoid detection by Amazon<br>
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                        <div style="margin: 0px !important" class="rt-card nc6">
+                            <div class="rt-logo pd-logo">
+                                <img src="./Images/ssense.svg" alt="">
+                            </div>
+                            <div class="rt-type pd-type">
+                                Fresh SSense
+                            </div>
+                            <div class="rt-price pd-price">
+                                $0.75/account
+                            </div>
+                            <div class="rt-desc pd-desc">
+                                Freshly generated SSense accounts<br>
+                                
+                                <br>Created using real IP addresses specific to your region
+                            </div>
+                            <a href="/api/discord/login" class="rt-btn pd-btn">
+                              <div class="nc-btn-text">
+                                  Please join server to purchase
+                              </div>
+                          </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="faq" class="faq">
+        <div class="maincol">
+            <div class="contents">
+                <div data-aos="fade-up" class="text">
+                    <div class="firstline">Got Questions?</div>
+                    <div class="secondline">WE HAVE ANSWERS</div>
+                </div>
+                <div data-aos="fade-up">
+                    <details>
+                        <summary>What do the different email access types mean?</summary>
+                        <div class="faq_content">
+                            <p class="ans">Catchall accounts are Nike accounts made using your own custom domain, which, if set up properly, will forward all emails to one master email. Provided email accounts are where you supply us with the emails you would like the accounts to be made under, and you will have full access to those emails since you own them. No access accounts are accounts made with made-up Gmails, similar to other account providers, where you will have no access to the Gmail inboxes used unless you decide to try and make the accounts yourself.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>What email access type should I pick?</summary>
+                        <div class="faq_content">
+                            <p class="ans">Right now, we are seeing that Gmail or Outlook based accounts tend to have slightly higher success rates. Since password resets are so rare right now, our recommendation if you are on a budget is to go with no-access accounts. Catchall accounts are still hitting though, so if you do not have your own emails to use, that is still a solid second option.</p>
+                        </div>
+                    </details>
+                    <details>
+                        <summary>When will ____ be in stock? </summary>
+                        <div class="faq_content">
+                            <p class="ans">This depends on our current demand, as well as how easy the product is to make. Join our Discord server and watch for our pings if you would like to catch a restock!</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="success" class="success">
+        <div data-aos="fade-up" class="text">
+            <div class="firstline">Look at all of our</div>
+            <div class="secondline">CUSTOMERS' SUCCESS</div>
+        </div>
+        <center data-aos="fade-up" class="timeline">
+            <a class="twitter-timeline" data-width="600" data-height="700" data-theme="dark" href="https://twitter.com/KlineAccounts?ref_src=twsrc%5Etfw">Tweets by KlineAccounts</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        </center>
+    </div>
+
+    <div class="footer">
+        <div class="main-ft">
+            <div class="br-footer">
+                <img class="footer-img" src="./Images/footer-logo.svg"/>
+                <p class="footer-lg-text">Kline Accounts © 2021</p>
+            </div>
+            <div class="middle-text">
+                <div class="general-ft">
+                    <div class="ft-title">
+                        <a>General</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="#about" class="hypertext">About</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="#accounts" class="hypertext">Accounts</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="#faq" class="hypertext">FAQ</a></div>
+                    <div class="ft-content fc">
+                        <a href="#success" class="hypertext">Success</a>
+                    </div>
+                </div>
+                <div class="general-ft" style="position: relative; top: -14px">
+                    <div class="ft-title">
+                        <a>Legal</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="" target="_blank" class="hypertext">Terms & Condition</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="" target="_blank" class="hypertext">Refund Policy</a>
+                    </div>
+                    <div class="ft-content fc">
+                        <a href="" target="_blank" class="hypertext">Privacy Policy</a>
+                    </div>
+                </div>
+                <div class="general-ft" style="position: relative; top: -30px">
+                    <div class="ft-title">Social</div>
+                    <div class="ft-content fc">
+                        <a href="https://twitter.com/klineaccounts" target="_blank" class="hypertext">Twitter</a>
+                    </div>
+                    <div class="ft-content fc hypertext">support@klineaccounts.com</div>
+                </div>
+            </div>
+            <a class="discord-link" href="https://discord.gg/ybFm6uMRvA" target="_blank">
+                <img class="discord-txt-logo" src="./Images/discord-txt-logo.png"/>
+                <div class="dbtn-text">Join now!</div>
+            </a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>AOS.init();</script>
+</body>
+</html>
