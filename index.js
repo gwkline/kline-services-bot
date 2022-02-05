@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 let JFILE = new JFile("./log.txt");
-let TOTAL_ORDERS = JFILE.lines
+let TOTAL_ORDERS = [] //JFILE.lines
 let UPDATE_LOG = []
 let WHITELIST = [
     "Fresh BestBuy Accounts",
@@ -61,12 +61,23 @@ async function getOrders() {
         for (i in orders["body"]) {
 
             let timestamp = orders["body"][i]["paid_at"]
+            let timeArr = ""
+            let timeArrTwo = ""
+            if (!(timestamp == null)) {
+                timeArr = timestamp.split('T')
+                timeArrTwo = timeArr[1].split(".")
+            }
+
             let oid = orders["body"][i]["id"]
             let email = orders["body"][i]["email"]
             let product = orders["body"][i]["product"]["title"]
             let quantity = orders["body"][i]["quantity"]
             let custom_field = orders["body"][i]["custom_fields"]["value"]
             let price = (orders["body"][i]["quantity"] * orders["body"][i]["price"]) * 0.971 - 0.3
+
+            if (product == "Forwarded Outlook/Microsoft Accounts") {
+                custom_field = orders["body"][i]["custom_fields"][0]["value"]
+            }
 
             //IF ALREADY LOGGED
 
@@ -82,7 +93,7 @@ async function getOrders() {
                 TOTAL_ORDERS.push(oid)
             } else {
                 let finOrder = {
-                    "Timestamp": timestamp,
+                    "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
                     "Order_ID": oid,
                     "Email": email,
                     "Product": product,
@@ -91,7 +102,7 @@ async function getOrders() {
                     "Price": price
 
                 }
-                UPDATE_LOG.push(finOrder)
+                UPDATE_LOG.unshift(finOrder)
                 TOTAL_ORDERS.push(oid)
                 fs.writeFile('log.txt', oid + '\n', { flag: "a+" }, (err) => {
                     'pass'
