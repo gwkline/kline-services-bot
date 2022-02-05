@@ -15,7 +15,7 @@ app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
 let JFILE = new JFile("./log.txt");
-let TOTAL_ORDERS = [] //JFILE.lines
+let TOTAL_ORDERS = JFILE.lines
 let UPDATE_LOG = []
 let WHITELIST = [
     "Fresh BestBuy Accounts",
