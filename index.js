@@ -113,7 +113,7 @@ async function getOrders() {
             let custom_field = orders["body"][i]["custom_fields"]["value"]
             let price = (orders["body"][i]["quantity"] * orders["body"][i]["price"]) * 0.971 - 0.3
 
-            if (WHITELIST.includes(product) {
+            if (WHITELIST.includes(product)) {
                 custom_field = orders["body"][i]["custom_fields"][0]["value"]
             }
 
