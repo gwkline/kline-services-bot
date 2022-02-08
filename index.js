@@ -110,12 +110,11 @@ async function getOrders() {
             let email = orders["body"][i]["email"]
             let product = orders["body"][i]["product"]["title"]
             let quantity = orders["body"][i]["quantity"]
-            let custom_field = orders["body"][i]["custom_fields"]["value"]
             let price = (orders["body"][i]["quantity"] * orders["body"][i]["price"]) * 0.971 - 0.3
 
             if (WHITELIST.includes(product)) {
                 custom_field = orders["body"][i]["custom_fields"][0]["value"]
-            }
+            } else { custom_field = "" }
 
             //IF ALREADY LOGGED
 
