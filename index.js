@@ -186,8 +186,15 @@ async function updateSpreadSheet() {
                     ],
                 },
             });
+            
+            fs.writeFile('./log.txt', UPDATE_LOG[u].Order_ID, err => {
+                if (err) {
+                    console.error(err)
+                return
+                }
+            })
         }
-
+        
         UPDATE_LOG = []
         return true
 
