@@ -182,7 +182,7 @@ async function updateSpreadSheet() {
                 valueInputOption: "USER_ENTERED",
                 resource: {
                     values: [
-                        [UPDATE_LOG[u].Timestamp, UPDATE_LOG[u].Order_ID, UPDATE_LOG[u].Email, UPDATE_LOG[u].Product, UPDATE_LOG[u].Custom_Field, UPDATE_LOG[u].Quantity, UPDATE_LOG[u].Price, (UPDATE_LOG[u].Price) * 0.7, "Pending"] //, quantity, note, price
+                        [UPDATE_LOG[u].Timestamp, UPDATE_LOG[u].Order_ID, UPDATE_LOG[u].Email, UPDATE_LOG[u].Product, UPDATE_LOG[u].Custom_Field, UPDATE_LOG[u].Quantity, UPDATE_LOG[u].Price, "", "Pending"] //, quantity, note, price
                     ],
                 },
             });
