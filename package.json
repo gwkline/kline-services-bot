@@ -18,9 +18,14 @@
     },
     "homepage": "https://github.com/gwkline/kline-services-bot#readme",
     "dependencies": {
+        "discord.js": "^13.6.0",
+        "dotenv": "^16.0.0",
         "express": "^4.17.2",
+        "fetch": "^1.1.0",
+        "fs": "^0.0.1-security",
         "googleapis": "^95.0.0",
         "jfile": "^1.1.12",
+        "node-fetch": "^2.5.0",
         "request": "^2.88.2"
     }
 }

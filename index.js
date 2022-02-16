@@ -6,6 +6,9 @@ var request = require('request');
 var JFile = require('jfile');
 const fs = require('fs');
 
+/* DISCORD BOT */
+require("./js/commandbot")
+
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
@@ -110,11 +113,12 @@ async function getOrders() {
             let email = orders["body"][i]["email"]
             let product = orders["body"][i]["product"]["title"]
             let quantity = orders["body"][i]["quantity"]
+            let custom_field = orders["body"][i]["custom_fields"]["value"]
             let price = (orders["body"][i]["quantity"] * orders["body"][i]["price"]) * 0.971 - 0.3
 
-            if (WHITELIST.includes(product)) {
+            if (product == "Forwarded Outlook/Microsoft Accounts") {
                 custom_field = orders["body"][i]["custom_fields"][0]["value"]
-            } else { custom_field = "" }
+            }
 
             //IF ALREADY LOGGED
 
@@ -186,15 +190,8 @@ async function updateSpreadSheet() {
                     ],
                 },
             });
-            
-            fs.writeFile('./log.txt', UPDATE_LOG[u].Order_ID, err => {
-                if (err) {
-                    console.error(err)
-                return
-                }
-            })
         }
-        
+
         UPDATE_LOG = []
         return true
 

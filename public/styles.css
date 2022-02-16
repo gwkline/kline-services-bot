@@ -1353,7 +1353,8 @@ details[open] summary~* {
 
 @media screen and (min-width: 1024px) {
     .main-menu {
-        margin-left: 200px;
+        margin-left: 00px;
+        margin-right: 0px;
     }
 }
 

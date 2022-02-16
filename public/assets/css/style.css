@@ -689,6 +689,6 @@ z .slider-area .hero-cap h2 {
     display: flex;
     justify-content: center;
     align-content: center;
-    padding-left: auto;
-    padding-right: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
