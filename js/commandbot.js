@@ -49,7 +49,7 @@ client.on('message', async(msg) => {
     if (msg.author.bot) return;
 
     //SUCCESS TWEET
-    if (msg.channelId == "844543753691463740" || msg.channelID == "874118430595354704") {
+    if ((msg.channelId == "844543753691463740") || (msg.channelID == "874118430595354704")) {
         // send the message and wait for it to be sent
         const confirmation = await msg.channel.send(`Thank you for posting your success, ${msg.author}!`);
         //return sendTweet(msg)
