@@ -3,9 +3,7 @@ const config = require("../config/whop.json");
 require("dotenv").config();
 const utils = require("../utils");
 var request = require('../node_modules/request');
-const { Console } = require("console");
 const fs = require("fs");
-const { resolve } = require("path");
 const fetch = require('node-fetch');
 
 
@@ -57,22 +55,13 @@ client.on('message', async(msg) => {
     //     //return sendTweet(msg)
     // }
 
-    if (msg.content.startsWith("!test")) {
-        if (msg.channel.id == 785355394444296196) {
+    if (msg.content.startsWith("!stock")) {
 
-            //embedVar = await getEmbed()
-            //data = await dataPull()
-            finished = await inStockEmbed()
-            await sleep(1000);
-            await msg.channel.send(finished)
+        finished = await inStockEmbed()
+        await msg.channel.send(finished)
 
-        }
     }
 });
-
-
-
-
 
 async function getEmbed() {
     try {
@@ -161,8 +150,6 @@ async function inStockEmbed() {
         prodString = `${inventory[i]["title"]}: [stocknum]`
         newString = `${inventory[i]["title"]}: ${stockLevel}`
         template["embeds"][0]["description"] = template["embeds"][0]["description"].replace(prodString, newString)
-        console.log(template)
-
 
     }
     return template
