@@ -1361,3 +1361,11 @@ details[open] summary~* {
 .li {
     text-decoration: none !important;
 }
+
+.nav-links {
+  display: flex;
+}
+
+.nav-row {
+  justify-content: center;
+}
