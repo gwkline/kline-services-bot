@@ -7,7 +7,7 @@ var JFile = require('jfile');
 const fs = require('fs');
 
 /* DISCORD BOT */
-require("./js/commandbot")
+require("./discordbot/commandbot")
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));

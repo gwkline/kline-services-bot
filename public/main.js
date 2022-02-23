@@ -1,5 +1,5 @@
 function showCard(selector, element) {
-    Array.from(document.querySelectorAll('.yummy-cards')).forEach(el=>{
+    Array.from(document.querySelectorAll('.yummy-cards')).forEach(el => {
         el.style.display = "none"
     })
 
@@ -9,8 +9,5 @@ function showCard(selector, element) {
 
 window.onload = () => {
     showCard('.yummy-nike');
+
 }
-
-
-    
-
