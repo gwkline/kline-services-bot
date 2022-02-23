@@ -402,6 +402,10 @@
     -o-transform: rotateY(0deg);
 }
 
+.header-area {
+    display: flex !important;
+}
+
 .header-area .header-top .header-info-right .header-social a:hover i {
     transform: rotateY(180deg);
     -webkit-transform: rotateY(180deg);

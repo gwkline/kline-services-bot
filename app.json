@@ -1,6 +1,6 @@
 {
-    "name": "Start on Heroku: Node.js",
-    "description": "A barebones Node.js app using Express 4",
+    "name": "Kline Accounts",
+    "description": "Kline Accounts",
     "repository": "https://github.com/gwkline/kline-services-bot",
     "logo": "https://cdn.rawgit.com/heroku/node-js-getting-started/main/public/node.svg",
     "keywords": ["node", "express", "heroku"],
