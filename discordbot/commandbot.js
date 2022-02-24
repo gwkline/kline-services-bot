@@ -32,44 +32,7 @@ client.on('messageCreate', async message => {
 	if (!client.application?.owner) await client.application?.fetch();
     
 	if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application?.owner.id) {
-		const data = {
-            name: 'stock',
-            description: 'Check our stock levels!',
-            options: [{
-                name: 'selection',
-                type: 'STRING',
-                description: 'The products you would like to view',
-                required: true,
-                choices: [
-                    {
-                        name: 'View All',
-                        value: 'view_all',
-                    },
-                    {
-                        name: 'Nike',
-                        value: 'nike',
-                    },
-                    {
-                        name: 'Gmail',
-                        value: 'gmail',
-                    },
-                    {
-                        name: 'Retail',
-                        value: 'retail',
-                    },
-                    {
-                        name: 'Combos',
-                        value: 'combo',
-                    },
-                    {
-                        name: 'FLX',
-                        value: 'flx',
-                    },
-                ],
-            }],
-        };
-
-        const command = await client.application?.commands.create(data);        //console.log(command);
+		await client.application?.commands.create(command);
 	}
     
 });
