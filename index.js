@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 50451
 const { google } = require("googleapis");
 var request = require('request');
 var JFile = require('jfile');
@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
     // }
 });
 
-
+/*
 // // Routes
 // app.use('/api/discord', require('.discordauth/api/discord.js'));
 
@@ -66,7 +66,7 @@ app.get('/', (req, res) => {
 //             });
 //     }
 // });
-
+*/
 app.get("/api/refresh", async(req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
