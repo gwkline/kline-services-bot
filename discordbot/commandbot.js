@@ -29,18 +29,18 @@ client.on("ready", async(e) => {
 });
 
 client.on('messageCreate', async message => {
-	if (!client.application?.owner) await client.application?.fetch();
-    
-	if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application?.owner.id) {
-		await client.application?.commands.create(command);
-	}
-    
+    if (!client.application.owner) await client.application.fetch();
+
+    if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application.owner.id) {
+        await client.application.commands.create(command);
+    }
+
 });
 
 client.on('interactionCreate', interaction => {
     if (!interaction.isCommand()) return;
     inStockEmbed(interaction.options._hoistedOptions[0].value, interaction)
-   
+
 });
 
 client.on('message', async(msg) => {
@@ -97,35 +97,34 @@ async function inStockEmbed(type, interaction) {
 
     let template = {
         "content": null,
-        "embeds": [
-          {
-            "url": "https://discord.gg/ybFm6uMRvA",
-            "color": 15868505,
-            "image": {
-              "url": "https://i.imgur.com/7XQ0QeN.png"
-            }
-          },
-          {
-            "title": "__***Product Stock Checker:***__",
-            "description": "Farmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]",
-            "color": 15868505,
-            "image": {
-              "url": "https://i.imgur.com/GCNBr54.png"
+        "embeds": [{
+                "url": "https://discord.gg/ybFm6uMRvA",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/7XQ0QeN.png"
+                }
             },
-            "thumbnail": {
-              "url": "https://i.imgur.com/M5w2jAS.png"
+            {
+                "title": "__***Product Stock Checker:***__",
+                "description": "Farmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/GCNBr54.png"
+                },
+                "thumbnail": {
+                    "url": "https://i.imgur.com/M5w2jAS.png"
+                }
             }
-          }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
-      }
+    }
 
     switch (type) {
         case "view_all":
             break;
         case "nike":
-            template.embeds[1].description = "Farmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"    
+            template.embeds[1].description = "Farmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
             break;
         case "gmail":
             template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]"
@@ -134,9 +133,9 @@ async function inStockEmbed(type, interaction) {
             template.embeds[1].description = "Aged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
             break;
 
-        case "combos":
-            template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
-            break;
+            //case "combos":
+            //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
+            //break;
 
         case "flx":
             template.embeds[1].description = "Warmed FLX Accounts: [stocknum]"
@@ -145,7 +144,7 @@ async function inStockEmbed(type, interaction) {
         default:
             break;
     }
-    
+
 
     let options = {
         'method': 'GET',
@@ -205,7 +204,7 @@ function sleep(ms) {
 
 const login = () => {
     client.login('OTM4OTE1MDM3MDIyNjc1MDQ1.YfxOxQ.MauL-bwvGH2yz5iMkEIdae9WfIk')
-    //client.login(config.tokenDiscord);
+        //client.login(config.tokenDiscord);
 };
 
 login();
