@@ -1,9 +1,5 @@
-const { smartdevicemanagement } = require('googleapis/build/src/apis/smartdevicemanagement');
-var JFile = require('jfile');
 const fetch = require('node-fetch')
 const fs = require('fs');
-const { file } = require('googleapis/build/src/apis/file');
-const { time } = require('console');
 var es = require('event-stream');
 
 
