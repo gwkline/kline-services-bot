@@ -1185,7 +1185,8 @@ details[open] summary~* {
         z-index: 9
     }
     .main-header {
-        z-index: 3
+        z-index: 3;
+        margin-right: 0
     }
     @media only screen and (min-width:768px) and (max-width:991px) {
         .main-header {
