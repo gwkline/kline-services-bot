@@ -13,6 +13,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.logger());
 app.set('view engine', 'ejs');
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
@@ -81,6 +82,11 @@ app.get("/api/refresh", async(req, res) => {
 
     res.redirect("https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/edit#gid=0");
 
+});
+
+app.post('/api/post-test', (req, res) => {
+    console.log('Got body:', req.body);
+    res.sendStatus(200);
 });
 
 async function getOrders() {

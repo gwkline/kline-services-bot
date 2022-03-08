@@ -50,7 +50,7 @@ client.on('message', async(msg) => {
     if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
         // send the message and wait for it to be sent
         const confirmation = await msg.reply(`Thanks for posting your success, ${msg.author}!`);
-        //return sendTweet(msg)
+        return sendTweet(msg)
     }
 
     if (msg.content.startsWith("!stock")) {
