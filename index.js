@@ -33,7 +33,7 @@ let WHITELIST = [
     "Fresh Target Account",
     "Fresh Outlook Combo Accounts",
     "Forwarded Outlook/Microsoft Accounts",
-    "106 Forwarded Gmail Accounts (105 Gmails Forwarded to 1 Master)"
+    "106 Pack of Forwarded Gmails"
 ]
 
 
