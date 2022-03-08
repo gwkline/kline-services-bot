@@ -12,7 +12,7 @@ const { mainModule } = require('process');
 const e = require('express');
 
 /* DISCORD BOT */
-const commandbot = require("./discordbot/commandbot")
+const commandbot = require("./discordbot/commandbot");
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -55,12 +55,19 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.post('/api/log-order', async(req, res) => {
+app.post('/api/log-order', async (req, res) => {
     res.sendStatus(200);
     console.log(await logOrder(req.body))
 });
 
-function logOrder(body) {
+app.post('/api/penis', async (req, res) => {
+    res.sendStatus(200);
+    let amount = 800
+    usd = amount / await commandbot.convertCurrency()
+});
+
+async function logOrder(body) {
+
 
     if (body.event != "order:paid") {
         return `Event: ${body.event}`
@@ -80,14 +87,28 @@ function logOrder(body) {
         let product = orders["product"]["title"]
         let quantity = orders["quantity"]
         let custom_field = "N/A"
-        let price = (orders["quantity"] * orders["price"]) * 0.971 - 0.3
+        let price = ((orders["quantity"] * orders["price"]) * 0.971) - 0.3
 
         if (WHITELIST.includes(product)) {
             if (orders["custom_fields"].length != 0) {
                 custom_field = orders["custom_fields"][0]["value"]
 
             }
+
+            switch (product) {
+                case "Forwarded Outlook/Microsoft Accounts":
+
+                    let smsCost = 5 * quantity / await convertCurrency()
+                    payout = (price*.7)  - smsCost
+                    break;
+
+                default:
+                    payout = price * .7
+                    break;
+            }
         }
+
+
 
         let order = {
             "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
@@ -96,18 +117,19 @@ function logOrder(body) {
             "Product": product,
             "Quantity": quantity,
             "Custom_Field": custom_field,
-            "Price": price
+            "Price": price,
+            "Payout": payout
 
         }
 
         if (WHITELIST.includes(orders.product.title)) {
+            
             commandbot.alertSkill(order)
-
             const auth = new google.auth.GoogleAuth({
                 keyFile: "credentials.json",
                 scopes: "https://www.googleapis.com/auth/spreadsheets",
             });
-            const client = auth.getClient();
+            const client = await auth.getClient();
             const googleSheets = google.sheets({ version: "v4", auth: client });
             const spreadsheetId = "1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM";
             googleSheets.spreadsheets.values.append({
@@ -117,7 +139,7 @@ function logOrder(body) {
                 valueInputOption: "USER_ENTERED",
                 resource: {
                     values: [
-                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, "", "Pending"] //, quantity, note, price
+                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
                     ],
                 },
             });
@@ -127,6 +149,13 @@ function logOrder(body) {
 
     }
 
+
+}
+async function convertCurrency() {
+    let res = await fetch("https://v6.exchangerate-api.com/v6/a30b11a7bdddf93ddd0c920a/latest/USD")
+    let body = await res.json()
+    let conv = await body.conversion_rates.RUB
+    return conv
 
 }
 
@@ -148,7 +177,7 @@ function logOrder(body) {
 // });
 
 
-process.on('uncaughtException', function(exception) {
+process.on('uncaughtException', function (exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")

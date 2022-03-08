@@ -9,6 +9,7 @@ const fetch = require('node-fetch');
 const { required } = require("nodemon/lib/config");
 const { finished } = require("stream");
 const { time } = require("console");
+const { exchangeRates } = require('exchange-rates-api');
 
 
 const client = new Discord.Client({
