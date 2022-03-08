@@ -12,7 +12,7 @@ const { mainModule } = require('process');
 const e = require('express');
 
 /* DISCORD BOT */
-require("./discordbot/commandbot")
+const commandbot = require("./discordbot/commandbot")
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -187,11 +187,12 @@ async function updateSpreadSheet() {
 }
 
 
-app.post('/api/log-order', (req, res) => {
+app.post('/api/log-order', async(req, res) => {
     res.sendStatus(200);
-    console.log(logOrder(req.body))
+    console.log(await logOrder(req.body))
 });
-async function logOrder(body) {
+
+function logOrder(body) {
 
     if (body.event != "order:paid") {
         return `Event: ${body.event}`
@@ -210,11 +211,14 @@ async function logOrder(body) {
         let email = orders["email"]
         let product = orders["product"]["title"]
         let quantity = orders["quantity"]
-        let custom_field = orders["custom_fields"]["value"]
+        let custom_field = "N/A"
         let price = (orders["quantity"] * orders["price"]) * 0.971 - 0.3
 
-        if (product == "Forwarded Outlook/Microsoft Accounts") {
-            custom_field = orders["custom_fields"][0]["value"]
+        if (WHITELIST.includes(product)) {
+            if (orders["custom_fields"].length != 0) {
+                custom_field = orders["custom_fields"][0]["value"]
+
+            }
         }
 
         let order = {
@@ -229,14 +233,16 @@ async function logOrder(body) {
         }
 
         if (WHITELIST.includes(orders.product.title)) {
+            commandbot.alertSkill(order)
+
             const auth = new google.auth.GoogleAuth({
                 keyFile: "credentials.json",
                 scopes: "https://www.googleapis.com/auth/spreadsheets",
             });
-            const client = await auth.getClient();
-            const googleSheets = await google.sheets({ version: "v4", auth: client });
+            const client = auth.getClient();
+            const googleSheets = google.sheets({ version: "v4", auth: client });
             const spreadsheetId = "1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM";
-            await googleSheets.spreadsheets.values.append({
+            googleSheets.spreadsheets.values.append({
                 auth,
                 spreadsheetId,
                 range: "Sheet1!A:A",
@@ -247,8 +253,6 @@ async function logOrder(body) {
                     ],
                 },
             });
-        } else {
-            console.log("TITLE NOT IN WHITELIST")
         }
 
         return `${body.event}\n${JSON.stringify(order, null, 4)}`
