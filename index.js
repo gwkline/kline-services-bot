@@ -6,6 +6,10 @@ var request = require('request');
 var JFile = require('jfile');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const { time } = require('console');
+const cluster = require('cluster');
+const { mainModule } = require('process');
+const e = require('express');
 
 /* DISCORD BOT */
 require("./discordbot/commandbot")
@@ -50,25 +54,6 @@ app.get('/', (req, res) => {
     // }
 });
 
-/*
-// // Routes
-// app.use('/api/discord', require('.discordauth/api/discord.js'));
-
-// app.use((err, req, res, next) => {
-//     switch (err.message) {
-//         case 'NoCodeProvided':
-//             return res.status(400).send({
-//                 status: 'ERROR',
-//                 error: err.message,
-//             });
-//         default:
-//             return res.status(500).send({
-//                 status: 'ERROR',
-//                 error: err.message,
-//             });
-//     }
-// });
-*/
 app.get("/api/refresh", async (req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -84,14 +69,6 @@ app.get("/api/refresh", async (req, res) => {
     res.redirect("https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/edit#gid=0");
 
 });
-
-app.post('/api/post-test', (req, res) => {
-
-    res.sendStatus(200);
-    console.log(req.body);
-    apiPing(req.body)
-});
-
 async function getOrders() {
     var options = {
         'method': 'GET',
@@ -163,49 +140,6 @@ async function getOrders() {
         }
     });
 }
-
-function apiPing(body) {
-
-  
-    if (body.event != "order:paid") {
-        return `Event: ${body.event}`
-    } else {
-        let orders = body["data"]["order"]
-        let timestamp = orders["paid_at"]
-        let timeArr = ""
-        let timeArrTwo = ""
-        if (!(timestamp == null)) {
-            timeArr = timestamp.split('T')
-            timeArrTwo = timeArr[1].split(".")
-        }
-
-        let oid = orders["id"]
-        let email = orders["email"]
-        let product = orders["product"]["title"]
-        let quantity = orders["quantity"]
-        let custom_field = orders["custom_fields"]["value"]
-        let price = (orders["quantity"] * orders["price"]) * 0.971 - 0.3
-
-        if (product == "Forwarded Outlook/Microsoft Accounts") {
-            custom_field = orders["custom_fields"][0]["value"]
-        }
-
-        console.log({
-                    "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
-                    "Order_ID": oid,
-                    "Email": email,
-                    "Product": product,
-                    "Quantity": quantity,
-                    "Custom_Field": custom_field,
-                    "Price": price
-    
-                })
-      
-    }
-
-
-}
-
 async function updateSpreadSheet() {
 
     console.log("Updating Spreadsheet")
@@ -250,3 +184,105 @@ async function updateSpreadSheet() {
         return false
     };
 }
+
+
+app.post('/api/log-order', (req, res) => {
+    res.sendStatus(200);
+    console.log(logOrder(req.body))
+});
+async function logOrder(body) {
+
+    if (body.event != "order:paid") {
+        return `Event: ${body.event}`
+    } else {
+
+        let orders = body["data"]["order"]
+        let timestamp = orders["paid_at"]
+        let timeArr = ""
+        let timeArrTwo = ""
+        if (!(timestamp == null)) {
+            timeArr = timestamp.split('T')
+            timeArrTwo = timeArr[1].split(".")
+        }
+
+        let oid = orders["id"]
+        let email = orders["email"]
+        let product = orders["product"]["title"]
+        let quantity = orders["quantity"]
+        let custom_field = orders["custom_fields"]["value"]
+        let price = (orders["quantity"] * orders["price"]) * 0.971 - 0.3
+
+        if (product == "Forwarded Outlook/Microsoft Accounts") {
+            custom_field = orders["custom_fields"][0]["value"]
+        }
+
+        let order =
+        {
+            "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
+            "Order_ID": oid,
+            "Email": email,
+            "Product": product,
+            "Quantity": quantity,
+            "Custom_Field": custom_field,
+            "Price": price
+
+        }
+
+        if (WHITELIST.includes(orders.product.title)) {
+            const auth = new google.auth.GoogleAuth({
+                keyFile: "credentials.json",
+                scopes: "https://www.googleapis.com/auth/spreadsheets",
+            });
+            const client = await auth.getClient();
+            const googleSheets = await google.sheets({ version: "v4", auth: client });
+            const spreadsheetId = "1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM";
+            await googleSheets.spreadsheets.values.append({
+                auth,
+                spreadsheetId,
+                range: "Sheet1!A:A",
+                valueInputOption: "USER_ENTERED",
+                resource: {
+                    values: [
+                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, "", "Pending"] //, quantity, note, price
+                    ],
+                },
+            });
+        } else {
+            console.log("TITLE NOT IN WHITELIST")
+        }
+
+        return `${body.event}\n${JSON.stringify(order, null, 4)}`
+
+    }
+
+
+}
+
+//app.use('/api/discord', require('./discordauth/discordAuth'));
+
+// app.use((err, req, res, next) => {
+//     switch (err.message) {
+//         case 'NoCodeProvided':
+//             return res.status(400).send({
+//                 status: 'ERROR',
+//                 error: err.message,
+//             });
+//         default:
+//             return res.status(500).send({
+//                 status: 'ERROR',
+//                 error: err.message,
+//             });
+//     }
+// });
+
+
+process.on('uncaughtException', function (exception) {
+
+    if (exception.code == 503) {
+        console.log("Discord is down")
+    } else {
+        console.log(exception);
+
+    }
+
+});

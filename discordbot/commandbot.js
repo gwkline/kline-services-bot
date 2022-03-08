@@ -8,6 +8,7 @@ const fs = require("fs");
 const fetch = require('node-fetch');
 const { required } = require("nodemon/lib/config");
 const { finished } = require("stream");
+const { time } = require("console");
 
 
 const client = new Discord.Client({
@@ -16,7 +17,7 @@ const client = new Discord.Client({
     intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES']
 });
 
-client.on("ready", async(e) => {
+client.on("ready", async (e) => {
     console.log("Successfully logged in")
     client.user.setStatus('available')
     client.user.setPresence({
@@ -43,7 +44,7 @@ client.on('interactionCreate', interaction => {
 
 });
 
-client.on('message', async(msg) => {
+client.on('message', async (msg) => {
     if (msg.author.bot) return;
 
     //SUCCESS TWEET
@@ -63,7 +64,7 @@ client.on('message', async(msg) => {
 
 async function getEmbed() {
     try {
-        fs.readFile('./js/inStock.txt', 'utf8', function(err, data) {
+        fs.readFile('./js/inStock.txt', 'utf8', function (err, data) {
             if (err) {
                 console.error(err)
                 throw "unable to read .czrc file.";
@@ -98,23 +99,23 @@ async function inStockEmbed(type, interaction) {
     let template = {
         "content": null,
         "embeds": [{
-                "url": "https://discord.gg/ybFm6uMRvA",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/7XQ0QeN.png"
-                }
-            },
-            {
-                "title": "__***Product Stock Checker:***__",
-                "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/GCNBr54.png"
-                },
-                "thumbnail": {
-                    "url": "https://i.imgur.com/M5w2jAS.png"
-                }
+            "url": "https://discord.gg/ybFm6uMRvA",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/7XQ0QeN.png"
             }
+        },
+        {
+            "title": "__***Product Stock Checker:***__",
+            "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/GCNBr54.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/M5w2jAS.png"
+            }
+        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -133,9 +134,9 @@ async function inStockEmbed(type, interaction) {
             template.embeds[1].description = "Aged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]"
             break;
 
-            //case "combos":
-            //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
-            //break;
+        //case "combos":
+        //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
+        //break;
 
         case "flx":
             template.embeds[1].description = "Warmed FLX Accounts: [stocknum]"
@@ -182,7 +183,7 @@ async function inStockEmbed(type, interaction) {
 }
 
 
-const sendTweet = async(msg) => {
+const sendTweet = async (msg) => {
     let username = msg.author.username
     let image_link = msg.attachments.at(0).attachment
     let content = msg.content
@@ -204,7 +205,9 @@ function sleep(ms) {
 
 const login = () => {
     client.login('OTM4OTE1MDM3MDIyNjc1MDQ1.YfxOxQ.MauL-bwvGH2yz5iMkEIdae9WfIk')
-        //client.login(config.tokenDiscord);
+    //client.login(config.tokenDiscord);
 };
 
+
 login();
+

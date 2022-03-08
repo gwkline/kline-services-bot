@@ -19,6 +19,8 @@
     "homepage": "https://github.com/gwkline/kline-services-bot#readme",
     "dependencies": {
         "body-parser": "^1.19.2",
+        "cluster": "^0.7.7",
+        "dayjs": "^1.10.8",
         "discord.js": "^13.6.0",
         "dotenv": "^16.0.0",
         "event-stream": "^4.0.1",
