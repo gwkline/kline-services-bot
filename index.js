@@ -1,6 +1,6 @@
 const express = require('express')
 const path = require('path')
-const PORT = process.env.PORT || 5000
+const PORT = process.env.PORT || 50000
 const { google } = require("googleapis");
 var request = require('request');
 var JFile = require('jfile');
@@ -14,7 +14,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
 //     }
 // });
 */
-app.get("/api/refresh", async(req, res) => {
+app.get("/api/refresh", async (req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -86,8 +86,10 @@ app.get("/api/refresh", async(req, res) => {
 });
 
 app.post('/api/post-test', (req, res) => {
-    console.log('Got body:', req);
+
     res.sendStatus(200);
+    console.log(req.body);
+    apiPing(req.body)
 });
 
 async function getOrders() {
@@ -101,7 +103,7 @@ async function getOrders() {
         }
     };
 
-    await request(options, function(error, response) {
+    await request(options, function (error, response) {
         if (error) throw new Error(error);
 
         let orders = response.toJSON()
@@ -160,6 +162,48 @@ async function getOrders() {
             }
         }
     });
+}
+
+function apiPing(body) {
+
+  
+    if (body.event != "order:paid") {
+        return `Event: ${body.event}`
+    } else {
+        let orders = body["data"]["order"]
+        let timestamp = orders["paid_at"]
+        let timeArr = ""
+        let timeArrTwo = ""
+        if (!(timestamp == null)) {
+            timeArr = timestamp.split('T')
+            timeArrTwo = timeArr[1].split(".")
+        }
+
+        let oid = orders["id"]
+        let email = orders["email"]
+        let product = orders["product"]["title"]
+        let quantity = orders["quantity"]
+        let custom_field = orders["custom_fields"]["value"]
+        let price = (orders["quantity"] * orders["price"]) * 0.971 - 0.3
+
+        if (product == "Forwarded Outlook/Microsoft Accounts") {
+            custom_field = orders["custom_fields"][0]["value"]
+        }
+
+        console.log({
+                    "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
+                    "Order_ID": oid,
+                    "Email": email,
+                    "Product": product,
+                    "Quantity": quantity,
+                    "Custom_Field": custom_field,
+                    "Price": price
+    
+                })
+      
+    }
+
+
 }
 
 async function updateSpreadSheet() {

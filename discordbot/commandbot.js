@@ -17,7 +17,7 @@ const client = new Discord.Client({
 });
 
 client.on("ready", async(e) => {
-    console.log("Logged in to Kline bot 1")
+    console.log("Successfully logged in")
     client.user.setStatus('available')
     client.user.setPresence({
         status: 'online',
