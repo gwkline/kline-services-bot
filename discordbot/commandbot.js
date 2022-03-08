@@ -62,38 +62,6 @@ client.on('message', async(msg) => {
     }
 });
 
-async function getEmbed() {
-    try {
-        fs.readFile('./js/inStock.txt', 'utf8', function(err, data) {
-            if (err) {
-                console.error(err)
-                throw "unable to read .czrc file.";
-            }
-            return data
-        });
-    } catch (error) {
-        console.log("Error: " + error);
-    }
-}
-
-async function dataPull() {
-    try {
-        var options = {
-            'method': 'GET',
-            'url': 'https://shoppy.gg/api/v1/products',
-            'json': true,
-            'headers': {
-                'User-Agent': "test",
-                'Authorization': 'RQepAUVv32dl6HqfpsR2CmTpLXdDgk2Rl139wcJuXS5hnAwGKU',
-            }
-        };
-
-        return await request.get(options)
-    } catch (error) {
-        console.log("Error: " + error);
-    }
-}
-
 async function inStockEmbed(type, interaction) {
 
     let template = {
@@ -189,6 +157,7 @@ async function alertSkill(order) {
         "embeds": [{
             "title": "**New Order Recieved**",
             "description": "",
+            "url": "https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/",
             "color": 16711767,
             "fields": [{
                     "name": "Timestamp:",
@@ -205,10 +174,6 @@ async function alertSkill(order) {
                 {
                     "name": "Product:",
                     "value": "4"
-                },
-                {
-                    "name": "Quantity:",
-                    "value": "5"
                 }
             ],
             "footer": {
@@ -223,31 +188,9 @@ async function alertSkill(order) {
     template.embeds[0].fields[1].value = order.Order_ID
     template.embeds[0].fields[2].value = order.Email
     template.embeds[0].fields[3].value = order.Product
-    template.embeds[0].fields[4].value = `${order.Quantity}`
 
-    console.log(template.embeds[0].fields)
-    const channel = client.channels.cache.get('945788250914713600').send(template).mention
-        // try {
-        //     const webhooks = await channel.fetchWebhooks();
-        //     const webhook = webhooks.find(wh => wh.token);
+    client.channels.cache.get('945788250914713600').send(template).mention
 
-    //     if (!webhook) {
-    //         return console.log('No webhook was found that I can use!');
-    //     }
-
-    //     const embed = new MessageEmbed()
-    //         .setTitle('Some Title')
-    //         .setColor('#0099ff');
-
-    //     await webhook.send({
-    //         content: 'Webhook test',
-    //         username: 'some-username',
-    //         avatarURL: 'https://i.imgur.com/AfFp7pu.png',
-    //         embeds: [embed],
-    //     });
-    // } catch (error) {
-    //     console.error('Error trying to send a message: ', error);
-    // }
 }
 
 
@@ -265,10 +208,6 @@ const sendTweet = async(msg) => {
             console.log(err)
             airbrake.notify(err)
         })
-}
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 const login = () => {
