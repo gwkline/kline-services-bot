@@ -5,6 +5,7 @@ const { google } = require("googleapis");
 var request = require('request');
 var JFile = require('jfile');
 const fs = require('fs');
+const bodyParser = require('body-parser');
 
 /* DISCORD BOT */
 require("./discordbot/commandbot")
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.set('views', path.join(__dirname, 'views'));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
