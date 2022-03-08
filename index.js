@@ -86,7 +86,7 @@ app.get("/api/refresh", async(req, res) => {
 });
 
 app.post('/api/post-test', (req, res) => {
-    console.log('Got body:', req.body);
+    console.log('Got body:', req);
     res.sendStatus(200);
 });
 
