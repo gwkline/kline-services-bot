@@ -1,15 +1,11 @@
 const Discord = require("discord.js");
-const command = require("./testcommand.json")
-const config = require("../config/whop.json");
-require("dotenv").config();
+const command = require("./stock_command.json")
+const config = require("../config/config.json");
 const utils = require("../utils");
-var request = require('request');
-const fs = require("fs");
 const fetch = require('node-fetch');
-const { required } = require("nodemon/lib/config");
-const { finished } = require("stream");
-const { time } = require("console");
-const { exchangeRates } = require('exchange-rates-api');
+const finished = require("stream");
+require("dotenv").config();
+
 
 
 const client = new Discord.Client({
@@ -154,7 +150,7 @@ async function inStockEmbed(type, interaction) {
 async function alertSkill(order) {
 
     let template = {
-        "content": "<@743578165384839280>",
+        "content": null,//"<@743578165384839280>",
         "embeds": [{
             "title": "**New Order Recieved**",
             "description": "",

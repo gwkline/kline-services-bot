@@ -2,16 +2,9 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 50000
 const { google } = require("googleapis");
-var request = require('request');
-var JFile = require('jfile');
-const fs = require('fs');
+const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
-const { time } = require('console');
-const cluster = require('cluster');
-const { mainModule } = require('process');
-const e = require('express');
-
-/* DISCORD BOT */
+const console = require('console');
 const commandbot = require("./discordbot/commandbot");
 
 const app = express();
@@ -23,9 +16,6 @@ app.set('view engine', 'ejs');
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 
-let JFILE = new JFile("./log.txt");
-let TOTAL_ORDERS = JFILE.lines
-let UPDATE_LOG = []
 let WHITELIST = [
     "Fresh BestBuy Accounts",
     "Fresh SSense Accounts",
@@ -39,7 +29,7 @@ let WHITELIST = [
 
 app.get('/', (req, res) => {
 
-    res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    res.status(200).sendFile(path.join(__dirname, './public/index.html'));
 
     // if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
     //     console.log("Valid Cookie");
@@ -56,15 +46,15 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/log-order', async (req, res) => {
-    res.sendStatus(200);
+    try {
     console.log(await logOrder(req.body))
+    res.sendStatus(200);
+
+    } catch {
+        res.sendStatus(500)
+    }
 });
 
-app.post('/api/penis', async (req, res) => {
-    res.sendStatus(200);
-    let amount = 800
-    usd = amount / await commandbot.convertCurrency()
-});
 
 async function logOrder(body) {
 
@@ -126,7 +116,7 @@ async function logOrder(body) {
             
             commandbot.alertSkill(order)
             const auth = new google.auth.GoogleAuth({
-                keyFile: "credentials.json",
+                keyFile: "./config/credentials.json",
                 scopes: "https://www.googleapis.com/auth/spreadsheets",
             });
             const client = await auth.getClient();
@@ -158,9 +148,18 @@ async function convertCurrency() {
     return conv
 
 }
+process.on('uncaughtException', function (exception) {
+
+    if (exception.code == 503) {
+        console.log("Discord is down")
+    } else {
+        console.log(exception);
+
+    }
+
+});
 
 //app.use('/api/discord', require('./discordauth/discordAuth'));
-
 // app.use((err, req, res, next) => {
 //     switch (err.message) {
 //         case 'NoCodeProvided':
@@ -177,13 +176,3 @@ async function convertCurrency() {
 // });
 
 
-process.on('uncaughtException', function (exception) {
-
-    if (exception.code == 503) {
-        console.log("Discord is down")
-    } else {
-        console.log(exception);
-
-    }
-
-});
