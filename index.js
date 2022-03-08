@@ -12,7 +12,7 @@ const { mainModule } = require('process');
 const e = require('express');
 
 /* DISCORD BOT */
-const commandbot = require("./discordbot/commandbot")
+const commandbot = require("./discordbot/commandbot");
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -60,6 +60,12 @@ app.post('/api/log-order', async(req, res) => {
     console.log(await logOrder(req.body))
 });
 
+app.post('/api/penis', async(req, res) => {
+    res.sendStatus(200);
+    let amount = 800
+    usd = amount / await commandbot.convertCurrency()
+});
+
 function logOrder(body) {
 
     if (body.event != "order:paid") {
@@ -87,7 +93,19 @@ function logOrder(body) {
                 custom_field = orders["custom_fields"][0]["value"]
 
             }
+
+            switch (product) {
+                case "Forwarded Outlook/Microsoft Accounts":
+                    payout = (price * .7) - (quantity / (await convertCurrency()))
+                    break;
+
+                default:
+                    payout = price * .7
+                    break;
+            }
         }
+
+
 
         let order = {
             "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
@@ -117,7 +135,7 @@ function logOrder(body) {
                 valueInputOption: "USER_ENTERED",
                 resource: {
                     values: [
-                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, "", "Pending"] //, quantity, note, price
+                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, `$${payout}`, "Pending"] //, quantity, note, price
                     ],
                 },
             });

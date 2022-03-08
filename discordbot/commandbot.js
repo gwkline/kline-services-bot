@@ -9,6 +9,7 @@ const fetch = require('node-fetch');
 const { required } = require("nodemon/lib/config");
 const { finished } = require("stream");
 const { time } = require("console");
+const { exchangeRates } = require('exchange-rates-api');
 
 
 const client = new Discord.Client({
@@ -194,6 +195,14 @@ async function alertSkill(order) {
 }
 
 
+async function convertCurrency() {
+    let res = await fetch("https://v6.exchangerate-api.com/v6/a30b11a7bdddf93ddd0c920a/latest/USD")
+    let body = await res.json()
+    let conv = await body.conversion_rates.RUB
+    return conv
+
+}
+
 const sendTweet = async(msg) => {
     let username = msg.author.username
     let image_link = msg.attachments.at(0).attachment
@@ -219,5 +228,6 @@ const login = () => {
 login();
 
 module.exports = {
-    alertSkill
+    alertSkill,
+    convertCurrency
 }
