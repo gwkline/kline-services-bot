@@ -32,7 +32,8 @@ let WHITELIST = [
     "Fresh Walmart Accounts",
     "Fresh Target Account",
     "Fresh Outlook Combo Accounts",
-    "Forwarded Outlook/Microsoft Accounts"
+    "Forwarded Outlook/Microsoft Accounts",
+    "106 Forwarded Gmail Accounts (105 Gmails Forwarded to 1 Master)"
 ]
 
 
@@ -54,7 +55,7 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.get("/api/refresh", async (req, res) => {
+app.get("/api/refresh", async(req, res) => {
     async function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -80,7 +81,7 @@ async function getOrders() {
         }
     };
 
-    await request(options, function (error, response) {
+    await request(options, function(error, response) {
         if (error) throw new Error(error);
 
         let orders = response.toJSON()
@@ -216,8 +217,7 @@ async function logOrder(body) {
             custom_field = orders["custom_fields"][0]["value"]
         }
 
-        let order =
-        {
+        let order = {
             "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
             "Order_ID": oid,
             "Email": email,
@@ -276,7 +276,7 @@ async function logOrder(body) {
 // });
 
 
-process.on('uncaughtException', function (exception) {
+process.on('uncaughtException', function(exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")
