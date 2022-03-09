@@ -45,16 +45,15 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.post('/api/log-order', async (req, res) => {
+app.post('/api/log-order', async(req, res) => {
     try {
-    console.log(await logOrder(req.body))
-    res.sendStatus(200);
+        console.log(await logOrder(req.body))
+        res.sendStatus(200);
 
     } catch {
         res.sendStatus(500)
     }
 });
-
 
 async function logOrder(body) {
 
@@ -89,7 +88,7 @@ async function logOrder(body) {
                 case "Forwarded Outlook/Microsoft Accounts":
 
                     let smsCost = 5 * quantity / await convertCurrency()
-                    payout = (price*.7)  - smsCost
+                    payout = (price * .7) - smsCost
                     break;
 
                 default:
@@ -113,7 +112,7 @@ async function logOrder(body) {
         }
 
         if (WHITELIST.includes(orders.product.title)) {
-            
+
             commandbot.alertSkill(order)
             const auth = new google.auth.GoogleAuth({
                 keyFile: "./config/credentials.json",
@@ -148,7 +147,7 @@ async function convertCurrency() {
     return conv
 
 }
-process.on('uncaughtException', function (exception) {
+process.on('uncaughtException', function(exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")
@@ -174,5 +173,3 @@ process.on('uncaughtException', function (exception) {
 //             });
 //     }
 // });
-
-

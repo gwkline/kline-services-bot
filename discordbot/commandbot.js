@@ -150,7 +150,7 @@ async function inStockEmbed(type, interaction) {
 async function alertSkill(order) {
 
     let template = {
-        "content": null,//"<@743578165384839280>",
+        "content": null, //"<@743578165384839280>",
         "embeds": [{
             "title": "**New Order Recieved**",
             "description": "",
@@ -188,6 +188,27 @@ async function alertSkill(order) {
 
     client.channels.cache.get('945788250914713600').send(template).mention
 
+}
+
+async function createACOForm(type) {
+    const auth = new google.auth.GoogleAuth({
+        keyFile: "../config/credentials.json",
+        scopes: "https://www.googleapis.com/auth/forms",
+    });
+    const client = await auth.getClient();
+    const googleForms = google.forms({ version: "v4", auth: client });
+    const formID = "HI";
+    googleForms.forms.values.append({
+        auth,
+        spreadsheetId,
+        range: "Sheet1!A:A",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            values: [
+                [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
+            ],
+        },
+    });
 }
 
 
