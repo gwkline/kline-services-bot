@@ -14,7 +14,7 @@ const client = new Discord.Client({
     intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES']
 });
 
-client.on("ready", async(e) => {
+client.on("ready", async (e) => {
     console.log("Successfully logged in")
     client.user.setStatus('available')
     client.user.setPresence({
@@ -41,7 +41,7 @@ client.on('interactionCreate', interaction => {
 
 });
 
-client.on('message', async(msg) => {
+client.on('message', async (msg) => {
     if (msg.author.bot) return;
 
     //SUCCESS TWEET
@@ -64,23 +64,23 @@ async function inStockEmbed(type, interaction) {
     let template = {
         "content": null,
         "embeds": [{
-                "url": "https://discord.gg/ybFm6uMRvA",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/7XQ0QeN.png"
-                }
-            },
-            {
-                "title": "__***Product Stock Checker:***__",
-                "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\Platinum Nike Accounts: [stocknum]\n\Outlook + Nike Combo: [stocknum]\Gmail + Nike Combo: [stocknum]",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/GCNBr54.png"
-                },
-                "thumbnail": {
-                    "url": "https://i.imgur.com/M5w2jAS.png"
-                }
+            "url": "https://discord.gg/ybFm6uMRvA",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/7XQ0QeN.png"
             }
+        },
+        {
+            "title": "__***Product Stock Checker:***__",
+            "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/GCNBr54.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/M5w2jAS.png"
+            }
+        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -90,7 +90,7 @@ async function inStockEmbed(type, interaction) {
         case "view_all":
             break;
         case "nike":
-            template.embeds[1].description = "Gold Nike Accounts: [stocknum]\Platinum Nike Accounts: [stocknum]\n\Outlook + Nike Combo: [stocknum]\Gmail + Nike Combo: [stocknum]"
+            template.embeds[1].description = "Gold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]"
             break;
         case "gmail":
             template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]"
@@ -99,9 +99,9 @@ async function inStockEmbed(type, interaction) {
             template.embeds[1].description = "Aged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]"
             break;
 
-            //case "combos":
-            //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
-            //break;
+        //case "combos":
+        //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
+        //break;
 
         // case "flx":
         //     template.embeds[1].description = "Warmed FLX Accounts: [stocknum]"
@@ -150,28 +150,28 @@ async function inStockEmbed(type, interaction) {
 async function alertSkill(order) {
 
     let template = {
-        "content": null, //"<@743578165384839280>",
+        "content": "<@743578165384839280>",
         "embeds": [{
             "title": "**New Order Recieved**",
             "description": "",
             "url": "https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/",
             "color": 16711767,
             "fields": [{
-                    "name": "Timestamp:",
-                    "value": "1"
-                },
-                {
-                    "name": "Order ID:",
-                    "value": "2"
-                },
-                {
-                    "name": "Email:",
-                    "value": "3"
-                },
-                {
-                    "name": "Product:",
-                    "value": "4"
-                }
+                "name": "Timestamp:",
+                "value": "1"
+            },
+            {
+                "name": "Order ID:",
+                "value": "2"
+            },
+            {
+                "name": "Email:",
+                "value": "3"
+            },
+            {
+                "name": "Product:",
+                "value": "4"
+            }
             ],
             "footer": {
                 "text": "Kline Services",
@@ -212,7 +212,7 @@ async function createACOForm(type) {
 }
 
 
-const sendTweet = async(msg) => {
+const sendTweet = async (msg) => {
     let username = msg.author.username
     let image_link = msg.attachments.at(0).attachment
     let content = msg.content
@@ -230,7 +230,7 @@ const sendTweet = async(msg) => {
 
 const login = () => {
     client.login('OTM4OTE1MDM3MDIyNjc1MDQ1.YfxOxQ.MauL-bwvGH2yz5iMkEIdae9WfIk')
-        //client.login(config.tokenDiscord);
+    //client.login(config.tokenDiscord);
 };
 
 
