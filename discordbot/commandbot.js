@@ -72,7 +72,7 @@ async function inStockEmbed(type, interaction) {
             },
             {
                 "title": "__***Product Stock Checker:***__",
-                "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]",
+                "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\Platinum Nike Accounts: [stocknum]\n\Outlook + Nike Combo: [stocknum]\Gmail + Nike Combo: [stocknum]",
                 "color": 15868505,
                 "image": {
                     "url": "https://i.imgur.com/GCNBr54.png"
@@ -90,7 +90,7 @@ async function inStockEmbed(type, interaction) {
         case "view_all":
             break;
         case "nike":
-            template.embeds[1].description = "Farmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
+            template.embeds[1].description = "Gold Nike Accounts: [stocknum]\Platinum Nike Accounts: [stocknum]\n\Outlook + Nike Combo: [stocknum]\Gmail + Nike Combo: [stocknum]"
             break;
         case "gmail":
             template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]"
@@ -103,9 +103,9 @@ async function inStockEmbed(type, interaction) {
             //template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nWarmed FLX Accounts: [stocknum]\n\nFarmed Nike Account (Catchall): [stocknum]\nFarmed Nike Accounts (No Email Access): [stocknum]\nFarmed Nike Accounts (You Provide Emails): [stocknum]\n\nFresh Nike Accounts (Catchall): [stocknum]\nFresh Nike Accounts (No Email Access): [stocknum]\nFresh Nike Accounts (You Provide Emails): [stocknum]"
             //break;
 
-        case "flx":
-            template.embeds[1].description = "Warmed FLX Accounts: [stocknum]"
-            break;
+        // case "flx":
+        //     template.embeds[1].description = "Warmed FLX Accounts: [stocknum]"
+        //     break;
 
         default:
             break;
