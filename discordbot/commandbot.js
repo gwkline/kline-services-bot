@@ -52,9 +52,7 @@ client.on('message', async (msg) => {
     }
 
     if (msg.content.startsWith("!stock")) {
-
-        finished = await inStockEmbed()
-        await msg.reply(finished)
+        await msg.reply("Hi")
 
     }
 });

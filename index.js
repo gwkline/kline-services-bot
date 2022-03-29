@@ -45,13 +45,13 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.post('/api/log-order', async(req, res) => {
+app.post('/api/log-order', async (req, res) => {
     try {
         console.log(await logOrder(req.body))
-        res.sendStatus(200);
+        res.sendStatus(201);
 
     } catch {
-        res.sendStatus(500)
+        res.sendStatus(200)
     }
 });
 
@@ -147,7 +147,7 @@ async function convertCurrency() {
     return conv
 
 }
-process.on('uncaughtException', function(exception) {
+process.on('uncaughtException', function (exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")

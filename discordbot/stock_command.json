@@ -1,32 +1,30 @@
 {
     "name": "stock",
     "description": "Check our stock levels!",
-    "options": [{
-        "name": "selection",
-        "type": "STRING",
-        "description": "The products you would like to view",
-        "required": true,
-        "choices": [{
-                "name": "View All",
-                "value": "view_all"
-            },
-            {
-                "name": "Gmail",
-                "value": "gmail"
-            },
-            {
-                "name": "Nike",
-                "value": "nike"
-            },
-
-            {
-                "name": "Retail",
-                "value": "retail"
-            },
-            {
-                "name": "FLX",
-                "value": "flx"
-            }
-        ]
-    }]
+    "options": [
+        {
+            "name": "selection",
+            "type": "STRING",
+            "description": "The products you would like to view",
+            "required": true,
+            "choices": [
+                {
+                    "name": "View All",
+                    "value": "view_all"
+                },
+                {
+                    "name": "Gmail",
+                    "value": "gmail"
+                },
+                {
+                    "name": "Nike",
+                    "value": "nike"
+                },
+                {
+                    "name": "Retail",
+                    "value": "retail"
+                }
+            ]
+        }
+    ]
 }
