@@ -8,8 +8,8 @@ const collect = require('collect.js');
 
 
 let BOTS = {
-    TRICKLE: 2,
-    VALOR: 2,
+    TRICKLE: 4,
+    VALOR: 0,
     MEK: 0,
     VELOX: 0,
 }
@@ -18,16 +18,18 @@ let TOTAL = BOTS.TRICKLE + BOTS.VALOR + BOTS.MEK + BOTS.VELOX
 let PROXY = {
     QUANTITY: 2000 * TOTAL,
     LEMON: true,
-    OXY: false,
+    OXY: true,
     SMART: false,
-    PROXDROP: false
+    PROXDROP: false,
+    ISP: false,
 }
 
 
-let SKU = ["GY1759"]
+let SKU = ["CP9654"]
 let MODES1 = ["2", "3"]
 let MODES0 = ["2aycd", "3aycd"]
 let SIZING = "random"
+let TRICKLE_ON = true
 
 let EXPORT_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/${SKU}_SETUP`
 let ISP_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/Proxies/dropday.txt`
@@ -35,7 +37,7 @@ let PD_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/Proxies/proxydrop.txt`
 let TRICKLE_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/trickle.csv`
 
 let TASK_LIMIT = 1300
-let TASK_QUANTITY_TRICKLE = 5
+let TASK_QUANTITY_TRICKLE = 31
 
 
 
@@ -86,62 +88,64 @@ async function main() {
     sleep(2000)
 
     await getProxies(PROXY.QUANTITY)
-
-    let toggle = 0;
-    let csvArr = []
-    fs.createReadStream(TRICKLE_DIRECTORY)
-        .pipe(es.split())
-        .on('data', (r) => {
-            csvArr.push(r);
-        })
-        .on('end', () => {
-            for (i = 0; i < csvArr.length; i++) {
-                if (i == 0) {
-                    fs.appendFile(`${EXPORT_DIRECTORY}/profiles_in.csv`, csvArr[i] + "\n", (err) => {
-                        if (err) console.error('Couldn\'t append the data');
-                    });
-                    fs.appendFile(`${EXPORT_DIRECTORY}/profiles_aycd.csv`, csvArr[i] + "\n", (err) => {
-                        if (err) console.error('Couldn\'t append the data');
-                    });
-                    sleep(2000)
-
-                } else {
-                    line = csvArr[i]
-                    lineArr = line.split(',')
-                    var count = Math.floor(800 / (csvArr.length * SKU.length))
-
-                    if (lineArr[2] == "FIRST NAME" || lineArr[4] == undefined) { console.log("") } else {
-                        for (sku in SKU) {
-                            lineArr[0] = SKU[sku]
-                            lineArr[1] = SIZING
-                            lineArr[16] = TASK_QUANTITY_TRICKLE //Quantity
-                            lineArr[17] = "5000"
-                            lineArr[18] = "5000"
-                            lineArr[19] = "YEEZY"
-                            lineArr[20] = MODES0[(toggle % MODES0.length)]
-                            toggle++
-                            lineArr[21] = "abc"
-                            lineArr[22] = "def"
-                            line1 = lineArr.join(",")
-                            lineArr[20] = MODES1[(toggle % MODES1.length)]
-                            line2 = lineArr.join(",")
+    if (TRICKLE_ON) {
 
 
-                            fs.appendFile(`${EXPORT_DIRECTORY}/profiles_in.csv`, line2 + "\n", (err) => {
-                                if (err) console.error('Couldn\'t append the data');
-                            });
+        let toggle = 0;
+        let csvArr = []
+        fs.createReadStream(TRICKLE_DIRECTORY)
+            .pipe(es.split())
+            .on('data', (r) => {
+                csvArr.push(r);
+            })
+            .on('end', () => {
+                for (i = 0; i < csvArr.length; i++) {
+                    if (i == 0) {
+                        fs.appendFile(`${EXPORT_DIRECTORY}/profiles_in.csv`, csvArr[i] + "\n", (err) => {
+                            if (err) console.error('Couldn\'t append the data');
+                        });
+                        fs.appendFile(`${EXPORT_DIRECTORY}/profiles_aycd.csv`, csvArr[i] + "\n", (err) => {
+                            if (err) console.error('Couldn\'t append the data');
+                        });
+                        sleep(2000)
+
+                    } else {
+                        line = csvArr[i]
+                        lineArr = line.split(',')
+                        var count = Math.floor(800 / (csvArr.length * SKU.length))
+
+                        if (lineArr[2] == "FIRST NAME" || lineArr[4] == undefined) { console.log("") } else {
+                            for (sku in SKU) {
+                                lineArr[0] = SKU[sku]
+                                //lineArr[1] = SIZING
+                                lineArr[16] = TASK_QUANTITY_TRICKLE //Quantity
+                                lineArr[17] = "5000"
+                                lineArr[18] = "5000"
+                                lineArr[19] = "YEEZY"
+                                lineArr[20] = MODES0[(toggle % MODES0.length)]
+                                toggle++
+                                lineArr[21] = "abc"
+                                lineArr[22] = "def"
+                                line1 = lineArr.join(",")
+                                lineArr[20] = MODES1[(toggle % MODES1.length)]
+                                line2 = lineArr.join(",")
 
 
-                            fs.appendFile(`${EXPORT_DIRECTORY}/profiles_aycd.csv`, line1 + "\n", (err) => {
-                                if (err) console.error('Couldn\'t append the data');
-                            });
+                                fs.appendFile(`${EXPORT_DIRECTORY}/profiles_in.csv`, line2 + "\n", (err) => {
+                                    if (err) console.error('Couldn\'t append the data');
+                                });
+
+
+                                fs.appendFile(`${EXPORT_DIRECTORY}/profiles_aycd.csv`, line1 + "\n", (err) => {
+                                    if (err) console.error('Couldn\'t append the data');
+                                });
+                            }
                         }
                     }
-                }
-            };
+                };
 
-        })
-
+            })
+    }
 
 
 
@@ -268,21 +272,29 @@ async function lemon(quantity) {
 
 async function oxy(quantity) {
 
-    const response = await fetch(`https://product-service-w34nvoxnwq-uc.a.run.app/api/v1/data/generate/elite/${quantity}/Yeezysupply/STICKY`, {
+    const response = await fetch("https://legacy.whop.com/proxies/generate_proxies", {
         "headers": {
-            "authorization": "JWT eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJkaXNjb3JkX2lkIjoiMzYxOTEwODQ0MTQzMTczNjMyIiwidGVuZXRfdG9rZW4iOiJIUHBmNThvOThFVGZvVEwxM3g5S1FTcFlXMXYyIiwiaWF0IjoxNjQ3OTI0MjE3LCJleHAiOjE2NDc5MzUwMTcsImF1ZCI6IjM2MTkxMDg0NDE0MzE3MzYzMiIsImlzcyI6ImF1dGhfc2VydmljZSJ9.iaBckuFgKd4TxskFxlOHw4YmBxyTUD4j0zdpdTDthGEBmoY-N9d9BZeCjOlxjfM0XyRxT4_aCHuecRUMz-A2c_T_i0oA1YXol592PcMJ7OMdQzLfnvxhar6UCQSkFEw-On4OPU2WJ_AXOeLnRke9qkBEXEhdUMECxoC3-wN-ORJ3vJ5Q7UD4jPLN3WmmvFcxr8I_kUeRNovaY4tJ9LuRf998NQsAbR7aVeSif08ySXwTwxOdmjkjf5yYBcdoero9yhqwiccYkiBJWYfSOpwa3BdhfgfYpQKhUJktHtSCHXooGZ6ESz5YnLmyCBPiEYsSuU7PwtlJSIbNV7vUkHkYMwSzuB2fMEzkgrCzVMYmDfta5r3kJnc26VOSePpnEIF7-BjI_8TRjrGydW5mp5CAGjzmuQGiOT3AxVwk5PnmtJZVCcu3X_uwlaMjucShwcSfs0XDO7H5ehgvXVkbUw11b6l4z0OrGGGKOdLYngPUlJ3O03_yEYp3Cvqj1K__loXFejJuEVET6Ctan1o3SuANCUqG3gxQxNLE6nGKm8l8jEpJL6fBiX12Z9W1HLQAZRKmfXXeksqvu4LBmZcUeieuQi-e4MpOW3gLIU2ud3FWseDuycQIgSWbRk5rb8HJXWH6M43eqpISRucY2KFR0G6Nt7J-KYzk9R3E_zKcAw_wlqM",
-            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"99\", \"Google Chrome\";v=\"99\"",
+            "accept": "*/*",
+            "accept-language": "en-US,en;q=0.9",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "sec-ch-ua": "\" Not A;Brand\";v=\"99\", \"Chromium\";v=\"100\", \"Google Chrome\";v=\"100\"",
             "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "\"Windows\"",
-            "Referer": "https://maliceproxies.com/",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
+            "x-requested-with": "XMLHttpRequest",
+            "cookie": "amp_fef1e8=90d6552f-2ddc-4e77-89f2-33bfa0330ab8R...1fqond698.1fqond898.2.0.2; __stripe_mid=7de0692b-8eee-4a58-a50f-887ab7bea52bf2375c; intercom-id-llm7ll78=e7f90150-8e8f-4f00-8721-f5d928f097d1; amp_3ccada=_9XNfahNPaj6y6eb3k2lCM.Mjc3NTU=..1g06089h4.1g0608d1g.4.0.4; __stripe_mid=7de0692b-8eee-4a58-a50f-887ab7bea52bf2375c; __stripe_sid=0a79c878-6a62-4b1b-993e-38a8042e6ffff36dcd; user_id=eyJfcmFpbHMiOnsibWVzc2FnZSI6Ik1qYzNOVFU9IiwiZXhwIjoiMjAyNy0wNC0wOVQwMTo1MTowNC4wMjNaIiwicHVyIjpudWxsfX0%3D--3f6397775dc025b54cb682b336df0fb901bf2c0b; _rental_platform_session=iIQvhEzqlASMwVijiQMub%2Fr3%2B51rmioxA%2B8p6ovhEVvfYrq%2BD0y4kPuXKbN0UvzztBw1HOukCJDyt7mDQ7ClBucYnbUUEdZZBRiG5eP7E7Qa%2Be8%2Bx1Qbwyt8MSoqmeGj9hzPsSBxlhbyqRAmZdf6kxncQSDOAHQBx6XnNQ9i--CpNN21wBxYPxCpf9--BagoA4wEX2DUJ4nQmMLg7Q%3D%3D; intercom-session-llm7ll78=N0xGSkFmMEFiallrNmRqc2lYMDdITlJ1bzNKZGxFTW1LUktOZng4ZG1JWElIOW13RUtRWTZrWkIrM1hoOE10Ry0tZ3ZSQVJwckdkSDJmQUprOEhRRXJFUT09--c9f1e05ce31df17a94d6ae8a7e97ae95752049c3",
+            "Referer": "https://legacy.whop.com/proxies/dashboard",
             "Referrer-Policy": "strict-origin-when-cross-origin"
         },
-        "body": null,
-        "method": "GET"
+        "body": `authenticity_token=z4QNUgTOAq1IW79AIO64O5KZCRbHPqwrgVIRKwmGOjrSkXlalP2OH0ocn3BAg9EHc%2Fv33KDYPJWea9n6ARiZ9g%3D%3D&proxy_order_id=8152&number_of_proxies=${quantity}&country=us&proxy_type=2`,
+        "method": "POST"
     });
-    const body = await response.json()
+    //console.log(await response.text())
+    const body = await response.text()
 
-    var oxy = await body.list.toString().split("\n")
+    var oxy = await body.toString().split("\n")
     for (i in oxy) {
         oxy[i] = oxy[i].replace(',', "")
     }
