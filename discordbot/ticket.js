@@ -1,8 +1,4 @@
 
-//This is how a server owner can initialize the ticket bot
-//TODO: Allow server owner to set own channel/role names
-//TODO: Check that command is sent from server owner
-
 // case "ticket":
 //   print(`Setting up ticket channels for server: ${msg.guild.name}, ID: ${msg.guild.id}`)
 //   return await ticket.ticket_setup(msg.guild)
@@ -12,199 +8,22 @@ const config = require("../config/config.json");
 require("dotenv").config();
 const { sendRequest, patchRequest, getRequest, randomArrayShuffle, print, getInfoFromMessage } = require("../utils")
 
+let guild_info = []
+guild_info.ticket_channel = "968016088635945020"
+guild_info.open_ticket_category = "968015993416855562"
+guild_info.closed_ticket_category = "968016039617105970"
+guild_info.support_roles = ["785355393995767855", "785355393995767854", "959628440875712512"]
+guild_info.ticket_counter = 1
+
+
 
 //Responsible for checking if the captcha related channels exist in a passed guild
 //If the channels do not exist, they are created
 async function ticket_setup(guild) {
 
     //Get the guild_info object from the Whop DB
-    let guild_info = await getRequest(`discord_servers/${guild.id}`)
 
-    //TODO: DELETE LATER
-    guild_info.ticket_channel = "960071390856372225"
-    guild_info.open_ticket_category = "960072168870391808"
-    guild_info.closed_ticket_category = "960072169356922930"
-    guild_info.support_roles = ["960066633286709278", "960066753105391649", "960066807434194944"]
-
-
-    print("Setting up categories")
-
-    //If the DB does not have a set open ticket category ID, a new category is created
-    if (!guild_info.open_ticket_category) {
-        print("No open ticket category in DB, creating a new one")
-
-        openTicketOverwrites = [
-            {
-                id: guild.roles.everyone,
-                deny: ["VIEW_CHANNEL"],
-                allow: ["SEND_MESSAGES", "CONNECT"]
-            }]
-
-        for (let i = 0; i < guild_info.support_roles.length; i++) {
-            openTicketOverwrites.push({
-                id: guild_info.support_roles[i],
-                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"],
-            })
-        }
-
-        guild_info.open_ticket_category = (await guild.channels.create("Open Tickets", {
-            type: "GUILD_CATEGORY",
-            openTicketOverwrites
-        }))
-
-        print(guild_info.open_ticket_category)
-    }
-    //If the DB does have a set open ticket category ID, check that it still exists 
-    else {
-
-        //Search by ID
-        if (guild.channels.cache.find((channel) => (channel.id == guild_info.open_ticket_category))) {
-            print("Found open ticket category by ID query")
-        }
-
-        //If ID query does not work, search by name
-        else if (guild.channels.cache.find((channel) => (channel.name === "Open Tickets"))) {
-            print("Found open ticket category by name query")
-            guild_info.open_ticket_category = (guild.channels.cache.find((channel) => (channel.name === "Open Tickets"))).id
-        }
-
-        //If neither query works, create a new channel
-        else {
-
-            print("Open ticket category in DB is corrupted, creating a new one")
-            openTicketOverwrites = [
-                {
-                    id: guild.roles.everyone,
-                    deny: ["VIEW_CHANNEL"],
-                    allow: ["SEND_MESSAGES", "CONNECT"]
-                }]
-
-            for (let i = 0; i < guild_info.support_roles.length; i++) {
-                openTicketOverwrites.push({
-                    id: guild_info.support_roles[i],
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"]
-                })
-            }
-
-            guild_info.open_ticket_category = (await guild.channels.create("Open Tickets", {
-                type: "GUILD_CATEGORY",
-                openTicketOverwrites
-            })).id
-
-        }
-    }
-
-    //If the DB does not have a set closed ticket category ID, a new category is created
-    if (!guild_info.closed_ticket_category) {
-        print("No closed ticket category in DB, creating a new one")
-
-        closedTicketOverwrites = [
-            {
-                id: guild.roles.everyone,
-                deny: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"],
-            }]
-
-        for (let i = 0; i < guild_info.support_roles.length; i++) {
-            closedTicketOverwrites.push({
-                id: guild_info.support_roles[i],
-                allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"],
-            })
-        }
-
-        guild_info.closed_ticket_category = (await guild.channels.create("Closed Tickets", {
-            type: "GUILD_CATEGORY",
-            closedTicketOverwrites
-        })).id
-    }
-    //If the DB does have a set closed ticket category ID, check that it still exists 
-    else {
-
-        //Search by ID
-        if (guild.channels.cache.find((channel) => (channel.id == guild_info.closed_ticket_category))) {
-            print("Found closed ticket category by ID query")
-        }
-
-        //If ID query does not work, search by name
-        else if (guild.channels.cache.find((channel) => (channel.name === "Closed Tickets"))) {
-            print("Found closed ticket category by name query")
-            guild_info.closed_ticket_category = (guild.channels.cache.find((channel) => (channel.name === "Closed Tickets"))).id
-        }
-
-        //If neither query works, create a new channel
-        else {
-
-            print("Closed ticket category in DB is corrupted, creating a new one")
-            closedTicketOverwrites = [
-                {
-                    id: guild.roles.everyone,
-                    deny: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"],
-                }]
-
-            for (let i = 0; i < guild_info.support_roles.length; i++) {
-                closedTicketOverwrites.push({
-                    id: guild_info.support_roles[i],
-                    allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "CONNECT"],
-                })
-            }
-
-            guild_info.closed_ticket_category = (await guild.channels.create("Closed Tickets", {
-                type: "GUILD_CATEGORY",
-                closedTicketOverwrites
-            })).id
-
-        }
-    }
-
-    //If the DB does not have a set ticket channel ID, a new channel is created
-    if (!guild_info.ticket_channel) {
-
-        print("No ticket channel in DB, creating a new one")
-        guild_info.ticket_channel = (await guild.channels.create("tickets", {
-            type: "GUILD_TEXT",
-            permissionOverwrites: [
-                {
-                    id: guild.roles.everyone,
-                    allow: ["VIEW_CHANNEL"],
-                    deny: ["SEND_MESSAGES", "CONNECT"]
-                },
-            ]
-        })).id
-    }
-
-    //If the DB does have a set ticket channel ID, check that it still exists 
-    else {
-
-        //Search by ID
-        if (guild.channels.cache.find((channel) => (channel.id == guild_info.ticket_channel))) {
-            print("Found ticket channel by ID query")
-        }
-
-        //If ID query does not work, search by name
-        else if (guild.channels.cache.find((channel) => (channel.name === "tickets"))) {
-            print("Found ticket channel by name query")
-            guild_info.ticket_channel = (guild.channels.cache.find((channel) => (channel.name === "tickets"))).id
-        }
-
-        //If neither query works, create a new channel
-        else {
-
-            print("Ticket channel in DB is corrupted, creating a new one")
-            guild_info.ticket_channel = (await guild.channels.create("tickets", {
-                type: "GUILD_TEXT",
-                permissionOverwrites: [
-                    {
-                        id: guild.roles.everyone,
-                        allow: ["VIEW_CHANNEL"],
-                        deny: ["SEND_MESSAGES", "CONNECT"]
-                    },
-                ]
-            })).id
-
-        }
-    }
-
-    //Updated guild_info object is passed back to the caller
-    await patchRequest(`discord_servers/${guild.id}`, guild_info)
+    // //TODO: DELETE LATER
 
     //Once the verification channel ID is known, the embed is sent to it (if it doesn't already exist)
     await sendTicketEmbed(guild, guild_info.ticket_channel)
@@ -230,9 +49,9 @@ async function sendTicketEmbed(guild, ticket_channel) {
                     "title": config.TicketEmbedTitle,
                     "description": config.TicketEmbedDescription,
                     "color": config.TicketEmbedColor,
-                    "thumbnail": {
-                        "url": config.TicketEmbedThumbnail
-                    }
+                    "image": {
+                        "url": config.TicketEmbedImage
+                    },
                 }
             ],
             "components": [
@@ -243,7 +62,7 @@ async function sendTicketEmbed(guild, ticket_channel) {
                             "type": 2,
                             "label": "Open a ticket",
                             "style": 1,
-                            "custom_id": "openTicket-whop"
+                            "custom_id": "openTicket-kline"
                         },
 
                     ]
@@ -275,14 +94,6 @@ async function sendTicketEmbed(guild, ticket_channel) {
 //The ticket channel is made in the open ticket category
 async function makeTicket(interaction) {
     //Get the guild_info object from the Whop DB
-    let guild_info = await getRequest(`discord_servers/${interaction.guild.id}`)
-
-    //TODO: DELETE LATER
-    guild_info.ticket_channel = "960071390856372225"
-    guild_info.open_ticket_category = "960072168870391808"
-    guild_info.closed_ticket_category = "960072169356922930"
-    guild_info.support_roles = ["960066633286709278", "960066753105391649", "960066807434194944"]
-    guild_info.ticket_counter = 1
 
     newTicketChannel = (await interaction.guild.channels.create(`${interaction.user.username}-ticket-${guild_info.ticket_counter}`, {
         type: "GUILD_TEXT",
@@ -297,7 +108,7 @@ async function makeTicket(interaction) {
     })).id
 
 
-    NewTicketEmbedDescription = `Welcome <@${interaction.user.id}>! Please be patient, staff will be with you shortly!\n\n`
+    NewTicketEmbedDescription = `Welcome <@${interaction.user.id}>! Please be patient, staff will be with you shortly! While you wait, we have a few questions to help make this process as quick and simple as possible.\n\n`
 
     let template = {
         "content": null,
@@ -307,7 +118,7 @@ async function makeTicket(interaction) {
                 "description": NewTicketEmbedDescription,
                 "color": config.NewTicketEmbedColor,
                 "thumbnail": {
-                    "url": config.NewTicketEmbedThumbnail
+                    "url": config.ticketEmbedThumbnail
                 }
             }
         ],
@@ -319,7 +130,7 @@ async function makeTicket(interaction) {
                         "type": 2,
                         "label": "Close Ticket 🔒",
                         "style": 1,
-                        "custom_id": "closeTicket-whop"
+                        "custom_id": "closeTicket"
                     },
 
 
@@ -349,8 +160,114 @@ async function makeTicket(interaction) {
 
 
     guild_info.ticket_counter += 1
-    await patchRequest(`discord_servers/${interaction.guild.id}`, guild_info)
 
+    let templateQ1 = {
+        "content": null,
+        "embeds": [
+            {
+                "title": "Question 1: Are you having issues with your accounts?",
+                "description": "Please select the corresponding buttons below.",
+                "color": config.NewTicketEmbedColor,
+                "thumbnail": {
+                    "url": config.ticketEmbedThumbnail
+                }
+            }
+        ],
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 2,
+                        "label": "Yes",
+                        "style": 3,
+                        "custom_id": "accountIssue-kline"
+                    },
+                    {
+                        "type": 2,
+                        "label": "No",
+                        "style": 4,
+                        "custom_id": "q1no-kline"
+                    },
+                ]
+            }
+        ],
+    }
+
+    interaction.guild.channels.cache.get(newTicketChannel).send(templateQ1)
+
+}
+
+async function q2(interaction) {
+    let templateQ2 = {
+        "content": null,
+        "embeds": [
+            {
+                "title": "Question 2: Did you just purchase accounts and were told to open a ticket for delivery?",
+                "description": "Please select the corresponding buttons below.",
+                "color": config.NewTicketEmbedColor,
+                "thumbnail": {
+                    "url": config.ticketEmbedThumbnail
+                }
+            }
+        ],
+        "components": [
+            {
+                "type": 1,
+                "components": [
+                    {
+                        "type": 2,
+                        "label": "Yes",
+                        "style": 3,
+                        "custom_id": "accountDelivery-kline"
+                    },
+                    {
+                        "type": 2,
+                        "label": "No",
+                        "style": 4,
+                        "custom_id": "generalQuestion-kline"
+                    },
+                ]
+            }
+        ],
+    }
+    interaction.guild.channels.cache.get(newTicketChannel).send(templateQ2)
+}
+
+async function accountIssue(interaction) {
+
+    //delete the message connected to the reaction
+    await interaction.message.delete()
+
+    let template = {
+        "content": null,
+        "embeds": [
+            {
+                "title": "Account Issue",
+                "description": "Please paste your order ID below",
+                "color": config.TicketEmbedColor,
+                "thumbnail": {
+                    "url": config.ticketEmbedThumbnail
+                },
+            }
+        ],
+
+    }
+
+    await interaction.channel.send(template)
+
+    // Create a message collector
+    const filter = m => m.content.length == 36;
+    const collector = channel.createMessageCollector({ filter, time: 1000000 });
+    collector.on('collect', m => console.log(`Collected ${m.content}`));
+    collector.on('end', collected => console.log(`Collected ${collected.size} items`));
+}
+
+async function accountDelivery(interaction) {
+
+}
+
+async function generalQuestion(interaction) {
 
 }
 
@@ -374,13 +291,13 @@ async function closeTicket(interaction) {
                         "type": 2,
                         "label": "Close",
                         "style": 4,
-                        "custom_id": "closeTicketConfirm-whop"
+                        "custom_id": "closeTicketConfirm-kline"
                     },
                     {
                         "type": 2,
                         "label": "Cancel",
                         "style": 2,
-                        "custom_id": "reopenTicket-whop"
+                        "custom_id": "reopenTicket-kline"
                     },
 
 
@@ -456,19 +373,19 @@ async function closeTicketConfirm(interaction) {
                         "type": 2,
                         "label": "Save Ticket",
                         "style": 2,
-                        "custom_id": "saveTicket-whop"
+                        "custom_id": "saveTicket-kline"
                     },
                     {
                         "type": 2,
                         "label": "Reopen Ticket",
                         "style": 2,
-                        "custom_id": "reopenTicket-whop"
+                        "custom_id": "reopenTicket-kline"
                     },
                     {
                         "type": 2,
                         "label": "Delete Ticket",
                         "style": 2,
-                        "custom_id": "deleteTicket-whop"
+                        "custom_id": "deleteTicket-kline"
                     },
 
 
@@ -525,4 +442,8 @@ module.exports = {
     reopenTicket,
     saveTicket,
     deleteTicket,
+    q2,
+    accountIssue,
+    generalQuestion,
+    accountDelivery,
 }

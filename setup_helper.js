@@ -9,14 +9,15 @@ const collect = require('collect.js');
 
 let BOTS = {
     TRICKLE: 4,
-    VALOR: 0,
+    VALOR: 2,
     MEK: 0,
     VELOX: 0,
 }
+
 let TOTAL = BOTS.TRICKLE + BOTS.VALOR + BOTS.MEK + BOTS.VELOX
 
 let PROXY = {
-    QUANTITY: 2000 * TOTAL,
+    QUANTITY: 3000 * TOTAL,
     LEMON: true,
     OXY: true,
     SMART: false,
