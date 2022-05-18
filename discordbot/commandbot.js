@@ -35,61 +35,61 @@ client.on('messageCreate', async message => {
 
 });
 
-// client.on('interactionCreate', async interaction => {
-//     switch (interaction.customID) {
-//         //When user selects the "Open Ticket" button
-//         case "openTicket-kline":
-//             await ticket.makeTicket(interaction)
-//             break;
+client.on('interactionCreate', async interaction => {
+    // switch (interaction.customID) {
+    //     //When user selects the "Open Ticket" button
+    //     case "openTicket-kline":
+    //         await ticket.makeTicket(interaction)
+    //         break;
 
-//         //When user selects the "Close Ticket" button
-//         case "closeTicket-kline":
-//             await ticket.closeTicket(interaction)
-//             break;
+    //     //When user selects the "Close Ticket" button
+    //     case "closeTicket-kline":
+    //         await ticket.closeTicket(interaction)
+    //         break;
 
-//         case "accountIssue-kline":
-//             await ticket.accountIssue(interaction)
-//             break;
+    //     case "accountIssue-kline":
+    //         await ticket.accountIssue(interaction)
+    //         break;
 
-//         case "q1no-kline":
-//             await ticket.q2(interaction)
-//             break;
+    //     case "q1no-kline":
+    //         await ticket.q2(interaction)
+    //         break;
 
-//         case "accountDelivery-kline":
-//             await ticket.accountDelivery(interaction)
-//             break;
+    //     case "accountDelivery-kline":
+    //         await ticket.accountDelivery(interaction)
+    //         break;
 
-//         case "generalQuestion-kline":
-//             await ticket.generalQuestion(interaction)
-//             break;
+    //     case "generalQuestion-kline":
+    //         await ticket.generalQuestion(interaction)
+    //         break;
 
-//         //When user selects the "Close" button to confirm they want to close their ticket
-//         case "closeTicketConfirm-kline":
-//             await ticket.closeTicketConfirm(interaction)
-//             break;
+    //     //When user selects the "Close" button to confirm they want to close their ticket
+    //     case "closeTicketConfirm-kline":
+    //         await ticket.closeTicketConfirm(interaction)
+    //         break;
 
-//         //When user selects the "Cancel" button to reopen the semi-closed ticket
-//         case "reopenTicket-kline":
-//             await ticket.reopenTicket(interaction)
-//             break;
+    //     //When user selects the "Cancel" button to reopen the semi-closed ticket
+    //     case "reopenTicket-kline":
+    //         await ticket.reopenTicket(interaction)
+    //         break;
 
-//         //When user selects the "Close" button to confirm they want to close their ticket
-//         case "saveTicket-kline":
-//             await ticket.saveTicket(interaction)
-//             break;
+    //     //When user selects the "Close" button to confirm they want to close their ticket
+    //     case "saveTicket-kline":
+    //         await ticket.saveTicket(interaction)
+    //         break;
 
-//         //When user selects the "Delete" button to confirm they want to Delete their ticket
-//         case "deleteTicket-kline":
-//             await ticket.deleteTicket(interaction)
-//             break;
-//     }
+    //     //When user selects the "Delete" button to confirm they want to Delete their ticket
+    //     case "deleteTicket-kline":
+    //         await ticket.deleteTicket(interaction)
+    //         break;
+    // }
 
 
 
-//     if (!interaction.isCommand()) return;
-//     inStockEmbed(interaction.options._hoistedOptions[0].value, interaction)
+    if (!interaction.isCommand()) return;
+    inStockEmbed(interaction.options._hoistedOptions[0].value, interaction)
 
-// });
+});
 
 client.on('message', async (msg) => {
     if (msg.author.bot) return;
@@ -279,5 +279,8 @@ const login = () => {
 login();
 
 module.exports = {
-    alertSkill
+    alertSkill,
+    inStockEmbed,
+    sendTweet,
+    createACOForm
 }
