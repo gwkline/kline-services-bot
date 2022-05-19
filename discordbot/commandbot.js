@@ -24,6 +24,8 @@ client.on("ready", async (e) => {
             type: 'PLAYING'
         }
     })
+
+    setInterval(updateStock, 1000 * 10)
 });
 
 client.on('messageCreate', async message => {
@@ -84,10 +86,8 @@ client.on('interactionCreate', async interaction => {
     //         break;
     // }
 
-
-
     if (!interaction.isCommand()) return;
-    inStockEmbed(interaction.options._hoistedOptions[0].value, interaction)
+    inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
 
 });
 
@@ -107,7 +107,7 @@ client.on('message', async (msg) => {
     // }
 });
 
-async function inStockEmbed(type, interaction) {
+async function inStockCommand(type, interaction) {
 
     let template = {
         "content": null,
@@ -120,7 +120,7 @@ async function inStockEmbed(type, interaction) {
         },
         {
             "title": "__***Product Stock Checker:***__",
-            "description": "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]",
+            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]",
             "color": 15868505,
             "image": {
                 "url": "https://i.imgur.com/GCNBr54.png"
@@ -141,7 +141,7 @@ async function inStockEmbed(type, interaction) {
             template.embeds[1].description = "Gold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]"
             break;
         case "gmail":
-            template.embeds[1].description = "One-Click Gmail Accounts: [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]"
+            template.embeds[1].description = "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]"
             break;
         case "retail":
             template.embeds[1].description = "Aged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]"
@@ -150,7 +150,6 @@ async function inStockEmbed(type, interaction) {
         default:
             break;
     }
-
 
     let options = {
         'method': 'GET',
@@ -185,6 +184,76 @@ async function inStockEmbed(type, interaction) {
 
     interaction.reply(template)
     return template
+}
+
+async function updateStock(type, interaction) {
+
+    let template = {
+        "content": null,
+        "embeds": [{
+            "url": "https://discord.gg/ybFm6uMRvA",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/7XQ0QeN.png"
+            }
+        },
+        {
+            "title": "__***Kline Accounts Stock:***__",
+            "url": "https://klineaccounts.com/",
+            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\nForwarded Outlook/Microsoft Accounts: [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nOutlook + Nike Combo: [stocknum]\nGmail + Nike Combo: [stocknum]",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/GCNBr54.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/M5w2jAS.png"
+            }
+        }
+        ],
+        "username": "Kline Accounts",
+        "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
+    }
+
+    let options = {
+        'method': 'GET',
+        'json': true,
+        'headers': {
+            'User-Agent': "test",
+            'Authorization': 'RQepAUVv32dl6HqfpsR2CmTpLXdDgk2Rl139wcJuXS5hnAwGKU',
+        }
+    };
+
+    const inventoryJson = await fetch('https://shoppy.gg/api/v1/products', options);
+    let inventory = await inventoryJson.json();
+
+    for (i = 0; i < Object.keys(inventory).length; i++) {
+        if (parseInt(inventory[i]["stock"]) < 1) {
+            stockLevel = ` ${inventory[i]["stock"]} :red_circle:`
+
+        } else if ((parseInt(inventory[i]["stock"]) > 0) && (parseInt(inventory[i]["stock"]) < 20)) {
+            stockLevel = ` ${inventory[i]["stock"]} :yellow_circle:`
+
+        } else if ((parseInt(inventory[i]["stock"]) >= 20) && (parseInt(inventory[i]["stock"]) < 1000)) {
+            stockLevel = ` ${inventory[i]["stock"]} :green_circle:`
+        } else {
+            stockLevel = ` ∞ :green_circle:`
+        }
+
+        prodString = `${inventory[i]["title"]}: [stocknum]`
+        newString = `${inventory[i]["title"]}: ${stockLevel}`
+        template["embeds"][1]["description"] = template["embeds"][1]["description"].replace(prodString, newString)
+
+    }
+
+    let stock_channel = await client.channels.cache.get("976883417352376330")
+
+    stockMessage = (await stock_channel.guild.channels.cache.get("976883417352376330").messages.fetch({ "cache": true })).last()
+    if (stockMessage != undefined) {
+        stockMessage.edit(template)
+    }
+    else {
+        await client.channels.cache.get("976883417352376330").send(template)
+    }
 }
 
 async function alertSkill(order) {
@@ -280,7 +349,8 @@ login();
 
 module.exports = {
     alertSkill,
-    inStockEmbed,
+    inStockCommand,
     sendTweet,
-    createACOForm
+    createACOForm,
+    updateStock
 }
