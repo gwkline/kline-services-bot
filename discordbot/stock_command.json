@@ -23,6 +23,10 @@
                 {
                     "name": "Retail",
                     "value": "retail"
+                },
+                {
+                    "name": "FLX",
+                    "value": "flx"
                 }
             ]
         }
