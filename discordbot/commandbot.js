@@ -4,7 +4,8 @@ const config = require("../config/config.json");
 const utils = require("../utils");
 const fetch = require('node-fetch');
 require("dotenv").config();
-const ticket = require("./ticket")
+const ticket = require("./ticket");
+const { parse } = require("dotenv");
 
 
 const client = new Discord.Client({
@@ -250,6 +251,9 @@ async function updateStock(type, interaction) {
     let stock_channel = await client.channels.cache.get("976883417352376330")
 
     stockMessage = (await stock_channel.guild.channels.cache.get("976883417352376330").messages.fetch({ "cache": true })).last()
+
+    restockPing(stockMessage, template)
+
     if (stockMessage != undefined) {
         stockMessage.edit(template)
     }
@@ -257,6 +261,128 @@ async function updateStock(type, interaction) {
         await client.channels.cache.get("976883417352376330").send(template)
     }
 }
+
+async function restockPing(stockMessage, template) {
+    let newStock = template.embeds[1].description.split("\n")
+    let oldStock = stockMessage.embeds[1].description.split("\n")
+    let prodStockNew = -1
+    let prodStockOld = -1
+    let prodTitle = ""
+    let userTagArray = []
+    let userIDArray = []
+    let roleArray = {
+        "979482566975451196":[],
+        "979482499648454686":[],
+        "979482629114044509":[],
+        "979482355708330014":[],
+        "979482676916527165":[]
+    }
+    
+    
+
+    for (product in newStock) {
+
+        prodTitle = newStock[product].split(":")[0]
+        prodStockNew = parseInt(newStock[product].split(":")[1])
+        prodStockOld = parseInt(oldStock[product].split(":")[1])
+
+        if (prodStockOld == 0 && prodStockNew > 0) {//
+            switch (prodTitle) {
+                
+                case "Oneclick Gmails (With Proxy)":
+                case "One-Click Gmail Accounts":
+                case "Farmed Gmails (With Proxy)":
+                case "Farmed Gmail Accounts":
+
+                    roleArray["979482566975451196"].push(prodTitle)
+                    break;
+
+                case "EDU Gmail Accounts":
+                case "Prime EDU Gmail Accounts":
+                case "Aged Gmail Accounts":
+                case "Forwarded Gmail Accounts (Pack of 21)":
+
+                    roleArray["979482499648454686"].push(prodTitle)
+                    break;
+
+                case "Aged Amazon Account":
+                case "Fresh BestBuy Accounts":
+                case "Fresh Target Account":
+                case "Fresh SSense Accounts":
+                case "Fresh Walmart Accounts":
+
+                    roleArray["979482629114044509"].push(prodTitle)
+                    break;
+
+                case "Gold Nike Accounts":
+                case "Platinum Nike Accounts":
+                case "Gmail + Gold Combo":
+                case "Gmail + Platinum Combo":
+
+                    roleArray["979482355708330014"].push(prodTitle)
+                    break;
+
+                case "X2 FLX Accounts":
+                case "X3 FLX Accounts":
+
+                    roleArray["979482676916527165"].push(prodTitle)
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+
+
+    for (roles in roleArray) {
+
+        if (roleArray[roles].length > 0) {
+        
+            let guild = await client.channels.cache.get("976883417352376330").guild
+            await guild.members.fetch() //cache all members in the server
+            const role = guild.roles.cache.find(role => role.id == roles) //the role to check
+            userIDArray = role.members.map(m => m.id) // array of user IDs who have the role
+            userTagArray = role.members.map(m => m.user.tag) // array of user objects who have the role
+
+            for (user in userIDArray) {
+                
+                let productsRestocking = roleArray[roles].join(", ")
+
+                //dm's the user with the restock message
+                let userDM = await client.users.fetch(userIDArray[user])
+                let template = {
+                    "content": null,
+                    "embeds": [
+                        {
+                        "title": "Product Restock Notification",
+                        "description": `This is an automated notification letting you know that ${productsRestocking} has restocked!\n\nClick the URL above to view our page and purchase any accounts. To stop recieving these messages, please head to <#979470736064401408> and un-react to the emoji. Thank you!`,
+                        "url": "https://klineaccounts.com",
+                        "color": 16711767,
+                        "footer": {
+                            "text": "Kline Accounts",
+                            "icon_url": "https://i.imgur.com/unCJSO7.jpg"
+                            }
+                        }
+                    ],
+                    "username": "Kline Services",
+                    "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+                    "attachments": []
+                    }
+                
+                userDM.send(template)
+                console.log(`Sent ${userTagArray[user]} a DM with a restock message.`)
+
+
+                await client.channels.cache.get("958531791696834590").send(`${userTagArray[user]} has been notified of a ${prodTitle} restock!`)
+            }
+    
+        }
+    }
+}       
+    
+
 
 async function alertSkill(order) {
 
@@ -354,5 +480,6 @@ module.exports = {
     inStockCommand,
     sendTweet,
     createACOForm,
-    updateStock
+    updateStock,
+    restockPing
 }
