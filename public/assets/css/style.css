@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Nunito:300,400,600,700,800,900|Poppins:300,400,500,600,700,800,900&display=swap");
+
 .white-bg {
     background: #ffffff
 }
@@ -144,6 +145,7 @@
         -webkit-transform: rotate(0deg);
         transform: rotate(0deg)
     }
+
     to {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg)
@@ -154,6 +156,7 @@
     from {
         -webkit-transform: rotate(0deg)
     }
+
     to {
         -webkit-transform: rotate(360deg)
     }
@@ -237,6 +240,7 @@
         -o-transition: .6s;
         transition: .6s
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
@@ -254,6 +258,7 @@
         -o-transition: .6s;
         transition: .6s
     }
+
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
@@ -689,6 +694,7 @@ z .slider-area .hero-cap h2 {
 }
 
 .main-header {
+    width: 100%;
     font-family: "SFPro" !important;
     display: flex;
     justify-content: center;
