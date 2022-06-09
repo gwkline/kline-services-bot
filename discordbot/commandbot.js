@@ -143,7 +143,8 @@ client.on('interactionCreate', async interaction => {
             inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
             break;
 
-        case "too-long":
+        case "support":
+            console.log("got it")
             await automatedResponse(interaction, "none", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail")
             break;
 
@@ -605,7 +606,7 @@ const login = () => {
 };
 
 
-login();
+//login();
 
 module.exports = {
     alertSkill,
