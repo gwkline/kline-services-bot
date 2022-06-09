@@ -104,22 +104,6 @@ client.on('message', async(msg) => {
                 "description": "Which issue to address",
                 "required": true,
                 "choices": [{
-                        "name": "Check Order Date",
-                        "value": "date-check",
-                        "type": "2",
-                        "options": [{
-                            "name": "order_id",
-                            "type": "STRING",
-                            "description": "The customer's order ID",
-                            "required": true,
-                            "choices": [{
-                                "name": "Order ID",
-                                "value": "order-id",
-                            }]
-
-                        }]
-                    },
-                    {
                         "name": "Replace Gmail",
                         "value": "replace-gmail"
                     },
