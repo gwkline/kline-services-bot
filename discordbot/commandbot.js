@@ -6,11 +6,12 @@ const fetch = require('node-fetch');
 require("dotenv").config();
 
 let reasons = {
-    "too-long": "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.",
+    "too-long": "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail, if this is something you are interested please tag gkline#2534.",
     "replace-gmail": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
     "reverify-gmail": "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
     "replace-amazon": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
-    "replace-flx": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible."
+    "replace-flx": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+    "not-oc": "Unfortunately we generally don't do replacements on our Oneclick Gmails because they're farmed for over a month in most cases and are tested multiple times to ensure they are true Oneclicks. If you would like, staff can look over your farming setup and give you suggestion on how to improve account help. If this is the case, please ping gkline#2534."
 }
 
 
@@ -68,6 +69,11 @@ client.on('interactionCreate', async interaction => {
 
         case "too-long":
             await automatedResponse(interaction, "361910844143173632", "too-long")
+            break;
+
+        case "not-oc":
+            await automatedResponse(interaction, "none", "not-oc")
+            break;
 
 
 
@@ -132,6 +138,10 @@ client.on('message', async(msg) => {
                     {
                         "name": "Too Long",
                         "value": "too-long"
+                    },
+                    {
+                        "name": "Not Oneclick Yet",
+                        "value": "not-oc"
                     }
                 ]
             }]
