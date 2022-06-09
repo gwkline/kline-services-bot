@@ -38,7 +38,8 @@ client.on('interactionCreate', async interaction => {
     switch (interaction.options._hoistedOptions[0].value) {
 
         case "date-check":
-            await dateCheck(interaction)
+            console.log(interaction.message)
+            await dateCheck(interaction.message)
             break;
 
         case "replace-gmail":
@@ -93,7 +94,7 @@ client.on('message', async(msg) => {
                         "value": "date-check",
                         "type": "2",
                         "options": [{
-                            "name": "Order ID",
+                            "name": "order_id",
                             "type": "STRING",
                             "description": "The customer's order ID",
                             "required": true,
