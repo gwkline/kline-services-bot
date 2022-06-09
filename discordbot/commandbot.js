@@ -151,7 +151,7 @@ client.on('message', async(msg) => {
     }
 
     if (msg.content.toLowerCase().includes('!check') && msg.channel.id === "785355394444296196") {
-        await dateCheck(message)
+        await dateCheck(msg)
     }
 });
 
