@@ -4,8 +4,6 @@ const config = require("../config/config.json");
 const utils = require("../utils");
 const fetch = require('node-fetch');
 require("dotenv").config();
-const ticket = require("./ticket");
-const { parse } = require("dotenv");
 
 
 const client = new Discord.Client({
@@ -28,16 +26,63 @@ client.on("ready", async(e) => {
     setInterval(updateStock, 1000 * 10)
 });
 
-client.on('messageCreate', async message => {
-    if (!client.application.owner) await client.application.fetch();
+client.on('interactionCreate', async interaction => {
 
-    if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application.owner.id) {
+    if (!interaction.isCommand()) return;
+
+    if (interaction.commandName === "stock") {
+        inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
+        return;
+    }
+
+    switch (interaction.options._hoistedOptions[0].value) {
+
+        case "date-check":
+            await dateCheck(interaction)
+            break;
+
+        case "replace-gmail":
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            break;
+
+        case "reverify-gmail":
+            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            break;
+
+        case "replace-amazon":
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            break;
+
+        case "replace-flx":
+            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            break;
+
+        case "too-long":
+            await automatedResponse(interaction, "361910844143173632", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.")
+
+
+
+
+    }
+
+
+});
+
+client.on('message', async(msg) => {
+    if (msg.author.bot) return;
+
+    //SUCCESS TWEET
+    if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
+        // send the message and wait for it to be sent
+        await msg.reply(`Thanks for posting your success, ${msg.author}!`);
+        return sendTweet(msg)
+    }
+
+    if (message.content.toLowerCase().includes('!deploy') && message.author.id === client.application.owner.id) {
         message.reply('Deploying...')
-        let support_role = await message.guild.roles.cache.get('959628440875712512')
         let support = {
             "name": "support",
             "description": "Respond to customer issues",
-            "role": support_role.id,
             "options": [{
                 "name": "selection",
                 "type": "STRING",
@@ -89,112 +134,6 @@ client.on('messageCreate', async message => {
     if (message.content.toLowerCase().includes('!check') && message.channel.id === "785355394444296196") {
         await dateCheck(message)
     }
-
-});
-
-client.on('interactionCreate', async interaction => {
-    // switch (interaction.customID) {
-    //     //When user selects the "Open Ticket" button
-    //     case "openTicket-kline":
-    //         await ticket.makeTicket(interaction)
-    //         break;
-
-    //     //When user selects the "Close Ticket" button
-    //     case "closeTicket-kline":
-    //         await ticket.closeTicket(interaction)
-    //         break;
-
-    //     case "accountIssue-kline":
-    //         await ticket.accountIssue(interaction)
-    //         break;
-
-    //     case "q1no-kline":
-    //         await ticket.q2(interaction)
-    //         break;
-
-    //     case "accountDelivery-kline":
-    //         await ticket.accountDelivery(interaction)
-    //         break;
-
-    //     case "generalQuestion-kline":
-    //         await ticket.generalQuestion(interaction)
-    //         break;
-
-    //     //When user selects the "Close" button to confirm they want to close their ticket
-    //     case "closeTicketConfirm-kline":
-    //         await ticket.closeTicketConfirm(interaction)
-    //         break;
-
-    //     //When user selects the "Cancel" button to reopen the semi-closed ticket
-    //     case "reopenTicket-kline":
-    //         await ticket.reopenTicket(interaction)
-    //         break;
-
-    //     //When user selects the "Close" button to confirm they want to close their ticket
-    //     case "saveTicket-kline":
-    //         await ticket.saveTicket(interaction)
-    //         break;
-
-    //     //When user selects the "Delete" button to confirm they want to Delete their ticket
-    //     case "deleteTicket-kline":
-    //         await ticket.deleteTicket(interaction)
-    //         break;
-    // }
-
-    if (!interaction.isCommand()) return;
-
-    if (interaction.commandName === "stock") {
-        inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
-        return;
-    }
-
-    switch (interaction.options._hoistedOptions[0].value) {
-
-        case "date-check":
-            await dateCheck(interaction)
-            break;
-
-        case "replace-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
-            break;
-
-        case "reverify-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, include the proxy so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
-            break;
-
-        case "replace-amazon":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
-            break;
-
-        case "replace-flx":
-            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
-            break;
-
-        case "too-long":
-            await automatedResponse(interaction, "361910844143173632", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.")
-
-
-
-
-    }
-
-
-});
-
-client.on('message', async(msg) => {
-    if (msg.author.bot) return;
-
-    //SUCCESS TWEET
-    if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
-        // send the message and wait for it to be sent
-        const confirmation = await msg.reply(`Thanks for posting your success, ${msg.author}!`);
-        return sendTweet(msg)
-    }
-
-    // if (msg.content.startsWith("!stock")) {
-    //     await msg.reply("Hi")
-
-    // }
 });
 
 
