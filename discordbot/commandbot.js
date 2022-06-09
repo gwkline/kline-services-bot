@@ -108,7 +108,7 @@ client.on('message', async(msg) => {
                         "value": "replace-gmail"
                     },
                     {
-                        "name": "Re-verify Gmail",
+                        "name": "Reverify Gmail",
                         "value": "reverify-gmail"
                     },
                     {
