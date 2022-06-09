@@ -78,7 +78,7 @@ client.on('message', async(msg) => {
         return sendTweet(msg)
     }
 
-    if (message.content.toLowerCase().includes('!deploy') && message.author.id === client.application.owner.id) {
+    if (msg.content.toLowerCase().includes('!deploy') && msg.author.id === client.application.owner.id) {
         message.reply('Deploying...')
         let support = {
             "name": "support",
@@ -131,7 +131,7 @@ client.on('message', async(msg) => {
         await client.application.commands.create(support);
     }
 
-    if (message.content.toLowerCase().includes('!check') && message.channel.id === "785355394444296196") {
+    if (msg.content.toLowerCase().includes('!check') && msg.channel.id === "785355394444296196") {
         await dateCheck(message)
     }
 });
