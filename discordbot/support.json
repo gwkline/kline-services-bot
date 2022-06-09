@@ -1,0 +1,43 @@
+{
+    "name": "support",
+    "description": "Respond to customer issues",
+    "role": "support",
+    "options": [{
+        "name": "selection",
+        "type": "STRING",
+        "description": "Which issue to address",
+        "required": true,
+        "choices": [{
+                "name": "Check Order Date",
+                "value": "date-check",
+                "type": "2",
+                "options": [{
+                    "name": "Order ID",
+                    "type": "STRING",
+                    "description": "The customer's order ID",
+                    "required": true
+                }]
+            },
+            {
+                "name": "Replace Gmail",
+                "value": "replace-gmail"
+            },
+            {
+                "name": "Re-verify Gmail",
+                "value": "reverify-gmail"
+            },
+            {
+                "name": "Replace Amazon",
+                "value": "replace-amazon"
+            },
+            {
+                "name": "Replace FLX",
+                "value": "replace-flx"
+            },
+            {
+                "name": "Too Long",
+                "value": "too-long"
+            }
+        ]
+    }]
+}

@@ -9,7 +9,7 @@ const collect = require('collect.js');
 
 let BOTS = {
     TRICKLE: 4,
-    VALOR: 2,
+    VALOR: 0,
     MEK: 0,
     VELOX: 0,
 }
@@ -26,9 +26,9 @@ let PROXY = {
 }
 
 
-let SKU = ["CP9654"]
+let SKU = ["HP8739"]
 let MODES1 = ["2", "3"]
-let MODES0 = ["2aycd", "3aycd"]
+let MODES = ["2aycd", "3aycd"]
 let SIZING = "random"
 let TRICKLE_ON = true
 
@@ -38,7 +38,7 @@ let PD_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/Proxies/proxydrop.txt`
 let TRICKLE_DIRECTORY = `C:/Users/gwkli/OneDrive/Desktop/trickle.csv`
 
 let TASK_LIMIT = 1300
-let TASK_QUANTITY_TRICKLE = 31
+let TASK_QUANTITY_TRICKLE = 9
 
 
 
@@ -118,7 +118,7 @@ async function main() {
                         if (lineArr[2] == "FIRST NAME" || lineArr[4] == undefined) { console.log("") } else {
                             for (sku in SKU) {
                                 lineArr[0] = SKU[sku]
-                                //lineArr[1] = SIZING
+                                    //lineArr[1] = SIZING
                                 lineArr[16] = TASK_QUANTITY_TRICKLE //Quantity
                                 lineArr[17] = "5000"
                                 lineArr[18] = "5000"
@@ -128,7 +128,7 @@ async function main() {
                                 lineArr[21] = "abc"
                                 lineArr[22] = "def"
                                 line1 = lineArr.join(",")
-                                lineArr[20] = MODES1[(toggle % MODES1.length)]
+                                lineArr[20] = MODES[(toggle % MODES.length)]
                                 line2 = lineArr.join(",")
 
 

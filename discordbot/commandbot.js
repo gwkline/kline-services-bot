@@ -14,7 +14,7 @@ const client = new Discord.Client({
     intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES']
 });
 
-client.on("ready", async (e) => {
+client.on("ready", async(e) => {
     console.log("Successfully logged in")
     client.user.setStatus('available')
     client.user.setPresence({
@@ -32,7 +32,57 @@ client.on('messageCreate', async message => {
     if (!client.application.owner) await client.application.fetch();
 
     if (message.content.toLowerCase() === '!deploy' && message.author.id === client.application.owner.id) {
+        message.reply('Deploying...')
+        let support_role = await message.guild.roles.cache.get('959628440875712512')
+        let support = {
+            "name": "support",
+            "description": "Respond to customer issues",
+            "role": support_role.id,
+            "options": [{
+                "name": "selection",
+                "type": "STRING",
+                "description": "Which issue to address",
+                "required": true,
+                "choices": [{
+                        "name": "Check Order Date",
+                        "value": "date-check",
+                        "type": "1",
+                        "options": [{
+                            "name": "Order ID",
+                            "type": "STRING",
+                            "description": "The customer's order ID",
+                            "required": true
+                        }]
+                    },
+                    {
+                        "name": "Replace Gmail",
+                        "value": "replace-gmail"
+                    },
+                    {
+                        "name": "Re-verify Gmail",
+                        "value": "reverify-gmail"
+                    },
+                    {
+                        "name": "Replace Amazon",
+                        "value": "replace-amazon"
+                    },
+                    {
+                        "name": "Replace FLX",
+                        "value": "replace-flx"
+                    },
+                    {
+                        "name": "Too Long",
+                        "value": "too-long"
+                    }
+                ]
+            }]
+        }
         await client.application.commands.create(command);
+        await client.application.commands.create(support);
+    }
+
+    if (message.content.toLowerCase().includes('!check') && message.channel.id === "785355394444296196") {
+        await dateCheck(message)
     }
 
 });
@@ -87,11 +137,45 @@ client.on('interactionCreate', async interaction => {
     // }
 
     if (!interaction.isCommand()) return;
-    inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
+
+    switch (interaction.customID) {
+        case "stock":
+            inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
+            break;
+
+        case "too-long":
+            await automatedResponse(interaction, "none", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail")
+            break;
+
+        case "date-check":
+            await dateCheck(interaction)
+            break;
+
+        case "replace-gmail":
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            break;
+
+        case "reverify-gmail":
+            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, include the proxy so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            break;
+
+        case "replace-amazon":
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            break;
+
+        case "replace-flx":
+            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            break;
+
+
+
+
+    }
+
 
 });
 
-client.on('message', async (msg) => {
+client.on('message', async(msg) => {
     if (msg.author.bot) return;
 
     //SUCCESS TWEET
@@ -107,29 +191,82 @@ client.on('message', async (msg) => {
     // }
 });
 
+
+async function dateCheck(message) {
+
+    let order_id = message.content.split(" ")[1]
+
+    let options = {
+        'method': 'GET',
+        'json': true,
+        'headers': {
+            'User-Agent': "test",
+            'Authorization': 'RQepAUVv32dl6HqfpsR2CmTpLXdDgk2Rl139wcJuXS5hnAwGKU',
+        }
+    };
+
+    const inventoryJson = await fetch(`https://shoppy.gg/api/v1/orders/${order_id}`, options);
+    let order = await inventoryJson.json();
+    let date_unformatted = order.paid_at
+    let date = date_unformatted.split("T")[0]
+    let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
+
+    automatedResponse(message, `Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: ${pretty_date}`)
+
+}
+
+async function automatedResponse(interaction, user, reason) {
+
+    if (user == "none") {
+        content_var = null
+    } else {
+        content_var = `<@${user}>`
+    }
+
+
+    let template = {
+        "content": content_var,
+        "embeds": [{
+            "description": reason,
+            "color": 16711767,
+            "footer": {
+                "text": "Kline Support",
+                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
+            },
+            "timestamp": "2022-06-09T04:36:00.000Z"
+        }],
+        "username": "Kline Services",
+        "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+        "attachments": []
+    }
+
+    interaction.channel.send(template)
+
+}
+
 async function inStockCommand(type, interaction) {
 
     let template = {
         "content": null,
         "embeds": [{
-            "url": "https://discord.gg/ybFm6uMRvA",
-            "color": 15868505,
-            "image": {
-                "url": "https://i.imgur.com/7XQ0QeN.png"
-            }
-        },
-        {
-            "title": "__***Product Stock Checker:***__",
-            "url": "https://klineaccounts.com/",
-            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
-            "color": 15868505,
-            "image": {
-                "url": "https://i.imgur.com/GCNBr54.png"
+                "url": "https://discord.gg/ybFm6uMRvA",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/7XQ0QeN.png"
+                }
             },
-            "thumbnail": {
-                "url": "https://i.imgur.com/M5w2jAS.png"
+            {
+                "title": "__***Product Stock Checker:***__",
+                "url": "https://klineaccounts.com/",
+                "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/GCNBr54.png"
+                },
+                "thumbnail": {
+                    "url": "https://i.imgur.com/M5w2jAS.png"
+                }
             }
-        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -194,24 +331,24 @@ async function updateStock(type, interaction) {
     let template = {
         "content": null,
         "embeds": [{
-            "url": "https://discord.gg/ybFm6uMRvA",
-            "color": 15868505,
-            "image": {
-                "url": "https://i.imgur.com/7XQ0QeN.png"
-            }
-        },
-        {
-            "title": "__***Kline Accounts Stock:***__",
-            "url": "https://klineaccounts.com/",
-            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
-            "color": 15868505,
-            "image": {
-                "url": "https://i.imgur.com/GCNBr54.png"
+                "url": "https://discord.gg/ybFm6uMRvA",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/7XQ0QeN.png"
+                }
             },
-            "thumbnail": {
-                "url": "https://i.imgur.com/M5w2jAS.png"
+            {
+                "title": "__***Kline Accounts Stock:***__",
+                "url": "https://klineaccounts.com/",
+                "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
+                "color": 15868505,
+                "image": {
+                    "url": "https://i.imgur.com/GCNBr54.png"
+                },
+                "thumbnail": {
+                    "url": "https://i.imgur.com/M5w2jAS.png"
+                }
             }
-        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -256,8 +393,7 @@ async function updateStock(type, interaction) {
 
     if (stockMessage != undefined) {
         stockMessage.edit(template)
-    }
-    else {
+    } else {
         await client.channels.cache.get("976883417352376330").send(template)
     }
 }
@@ -286,7 +422,7 @@ async function restockPing(stockMessage, template) {
         prodStockNew = parseInt(newStock[product].split(":")[1])
         prodStockOld = parseInt(oldStock[product].split(":")[1])
 
-        if (prodStockOld == 0 && prodStockNew > 0) {//
+        if (prodStockOld == 0 && prodStockNew > 0) { //
             switch (prodTitle) {
 
                 case "Oneclick Gmails (With Proxy)":
@@ -354,18 +490,16 @@ async function restockPing(stockMessage, template) {
                 let userDM = await client.users.fetch(userIDArray[user])
                 let template = {
                     "content": null,
-                    "embeds": [
-                        {
-                            "title": "Product Restock Notification",
-                            "description": `This is an automated notification letting you know that ${productsRestocking} have restocked!\n\nClick the URL above to view our page and purchase any accounts. To stop recieving these messages, please head to <#979470736064401408> and un-react to the emoji. Thank you!`,
-                            "url": "https://klineaccounts.com",
-                            "color": 16711767,
-                            "footer": {
-                                "text": "Kline Accounts",
-                                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
-                            }
+                    "embeds": [{
+                        "title": "Product Restock Notification",
+                        "description": `This is an automated notification letting you know that ${productsRestocking} have restocked!\n\nClick the URL above to view our page and purchase any accounts. To stop recieving these messages, please head to <#979470736064401408> and un-react to the emoji. Thank you!`,
+                        "url": "https://klineaccounts.com",
+                        "color": 16711767,
+                        "footer": {
+                            "text": "Kline Accounts",
+                            "icon_url": "https://i.imgur.com/unCJSO7.jpg"
                         }
-                    ],
+                    }],
                     "username": "Kline Services",
                     "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
                     "attachments": []
@@ -382,8 +516,6 @@ async function restockPing(stockMessage, template) {
     }
 }
 
-
-
 async function alertSkill(order) {
 
     let template = {
@@ -394,21 +526,21 @@ async function alertSkill(order) {
             "url": "https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/",
             "color": 16711767,
             "fields": [{
-                "name": "Timestamp:",
-                "value": "1"
-            },
-            {
-                "name": "Order ID:",
-                "value": "2"
-            },
-            {
-                "name": "Email:",
-                "value": "3"
-            },
-            {
-                "name": "Product:",
-                "value": "4"
-            }
+                    "name": "Timestamp:",
+                    "value": "1"
+                },
+                {
+                    "name": "Order ID:",
+                    "value": "2"
+                },
+                {
+                    "name": "Email:",
+                    "value": "3"
+                },
+                {
+                    "name": "Product:",
+                    "value": "4"
+                }
             ],
             "footer": {
                 "text": "Kline Services",
@@ -449,7 +581,7 @@ async function createACOForm(type) {
 }
 
 
-const sendTweet = async (msg) => {
+const sendTweet = async(msg) => {
     let username = msg.author.username
     let image_link = msg.attachments.at(0).attachment
     let content = msg.content
@@ -468,7 +600,7 @@ const sendTweet = async (msg) => {
 const login = () => {
     //client.login('ODg3ODY2MjA5NTc0NDc3ODg2.YUKX2A.yok34z8DHiM7iFu1m8eZKgz1nWU') //testing
     client.login('OTM4OTE1MDM3MDIyNjc1MDQ1.YfxOxQ.MauL-bwvGH2yz5iMkEIdae9WfIk') //production
-    //ticket.ticket_setup()
+        //ticket.ticket_setup()
 
 };
 
