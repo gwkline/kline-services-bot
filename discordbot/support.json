@@ -1,26 +1,15 @@
 {
     "name": "support",
-    "description": "Respond to customer issues",
-    "role": "support",
+    "description": "Support!",
     "options": [{
-        "name": "selection",
+        "name": "Ticket Type",
         "type": "STRING",
-        "description": "Which issue to address",
+        "description": "The type of support needed",
         "required": true,
         "choices": [{
-                "name": "Check Order Date",
-                "value": "date-check",
-                "type": "2",
-                "options": [{
-                    "name": "Order ID",
-                    "type": "STRING",
-                    "description": "The customer's order ID",
-                    "required": true
-                }]
-            },
-            {
                 "name": "Replace Gmail",
-                "value": "replace-gmail"
+                "value": "replace-gmail",
+                "custom-id": "view_all"
             },
             {
                 "name": "Re-verify Gmail",

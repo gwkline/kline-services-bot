@@ -46,12 +46,17 @@ client.on('messageCreate', async message => {
                 "choices": [{
                         "name": "Check Order Date",
                         "value": "date-check",
-                        "type": "1",
+                        "type": "2",
                         "options": [{
                             "name": "Order ID",
                             "type": "STRING",
                             "description": "The customer's order ID",
-                            "required": true
+                            "required": true,
+                            "choices": [{
+                                "name": "Order ID",
+                                "value": "order-id",
+                            }]
+
                         }]
                     },
                     {
@@ -138,35 +143,35 @@ client.on('interactionCreate', async interaction => {
 
     if (!interaction.isCommand()) return;
 
-    switch (interaction.customID) {
-        case "stock":
-            inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
-            break;
+    if (interaction.commandName === "stock") {
+        inStockCommand(interaction.options._hoistedOptions[0].value, interaction)
+        return;
+    }
 
-        case "support":
-            console.log("got it")
-            await automatedResponse(interaction, "none", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail")
-            break;
+    switch (interaction.options._hoistedOptions[0].value) {
 
         case "date-check":
             await dateCheck(interaction)
             break;
 
         case "replace-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
             break;
 
         case "reverify-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, include the proxy so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, include the proxy so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
             break;
 
         case "replace-amazon":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
             break;
 
         case "replace-flx":
-            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and someone will assist you as soon as possible.")
+            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
             break;
+
+        case "too-long":
+            await automatedResponse(interaction, "361910844143173632", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.")
 
 
 
@@ -212,11 +217,12 @@ async function dateCheck(message) {
     let date = date_unformatted.split("T")[0]
     let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
 
-    automatedResponse(message, `Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: ${pretty_date}`)
+    message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: ${pretty_date}`)
 
 }
 
 async function automatedResponse(interaction, user, reason) {
+
 
     if (user == "none") {
         content_var = null
@@ -226,22 +232,24 @@ async function automatedResponse(interaction, user, reason) {
 
 
     let template = {
-        "content": content_var,
-        "embeds": [{
-            "description": reason,
-            "color": 16711767,
-            "footer": {
-                "text": "Kline Support",
-                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
-            },
-            "timestamp": "2022-06-09T04:36:00.000Z"
-        }],
-        "username": "Kline Services",
-        "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
-        "attachments": []
-    }
+            "content": content_var,
+            "embeds": [{
+                "description": reason,
+                "color": 16711767,
+                "footer": {
+                    "text": "Kline Support",
+                    "icon_url": "https://i.imgur.com/unCJSO7.jpg"
+                },
+                "timestamp": "2022-06-09T04:36:00.000Z"
+            }],
+            "username": "Kline Services",
+            "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+            "attachments": []
+        }
+        //delete the last message in a channel
+    await client.channels.cache.get(interaction.channel.id).send(template)
 
-    interaction.channel.send(template)
+    execute(interaction)
 
 }
 
@@ -581,6 +589,13 @@ async function createACOForm(type) {
     });
 }
 
+async function execute(interaction) {
+    await interaction.reply({
+        content: `.`,
+    });
+    await interaction.deleteReply();
+    await interaction.channel.send(interaction.options.getString("string"));
+}
 
 const sendTweet = async(msg) => {
     let username = msg.author.username
@@ -606,7 +621,7 @@ const login = () => {
 };
 
 
-//login();
+login();
 
 module.exports = {
     alertSkill,
