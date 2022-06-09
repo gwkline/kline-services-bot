@@ -171,7 +171,10 @@ async function dateCheck(message) {
 
     const inventoryJson = await fetch(`https://shoppy.gg/api/v1/orders/${order_id}`, options);
     let order = await inventoryJson.json();
-    console.log(order)
+    if (order.paid_at == null) {
+        await message.reply("This order has not been paid yet.")
+        return;
+    }
     let date_unformatted = order.paid_at
     let date = date_unformatted.split("T")[0]
     let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
