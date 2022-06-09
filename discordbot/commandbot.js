@@ -5,6 +5,14 @@ const utils = require("../utils");
 const fetch = require('node-fetch');
 require("dotenv").config();
 
+let reasons = {
+    "too-long": "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.",
+    "replace-gmail": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+    "reverify-gmail": "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+    "replace-amazon": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+    "replace-flx": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible."
+}
+
 
 const client = new Discord.Client({
     disableEveryone: true,
@@ -43,23 +51,23 @@ client.on('interactionCreate', async interaction => {
             break;
 
         case "replace-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "replace-gmail")
             break;
 
         case "reverify-gmail":
-            await automatedResponse(interaction, "361910844143173632", "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "reverify-gmail")
             break;
 
         case "replace-amazon":
-            await automatedResponse(interaction, "361910844143173632", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            await automatedResponse(interaction, "361910844143173632", "replace-amazon")
             break;
 
         case "replace-flx":
-            await automatedResponse(interaction, "218746577248976906", "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.")
+            await automatedResponse(interaction, "218746577248976906", "replace-flx")
             break;
 
         case "too-long":
-            await automatedResponse(interaction, "361910844143173632", "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail.")
+            await automatedResponse(interaction, "361910844143173632", "too-long")
 
 
 
@@ -71,7 +79,7 @@ client.on('interactionCreate', async interaction => {
 
 client.on('message', async(msg) => {
     if (msg.author.bot) return;
-
+    if (!client.application.owner) await client.application.fetch();
     //SUCCESS TWEET
     if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
         // send the message and wait for it to be sent
@@ -80,7 +88,7 @@ client.on('message', async(msg) => {
     }
 
     if (msg.content.toLowerCase().includes('!deploy') && msg.author.id === client.application.owner.id) {
-        message.reply('Deploying...')
+        msg.reply('Deploying...')
         let support = {
             "name": "support",
             "description": "Respond to customer issues",
@@ -163,6 +171,12 @@ async function dateCheck(message) {
 
 async function automatedResponse(interaction, user, reason) {
 
+    let thisReason = reasons[reason]
+    console.log()
+    if (reason == "replace-gmail" || reason == "reverify-gmail" || reason == "replace-amazon" || reason == "replace-flx") {
+        interaction.channel.setName(reason)
+    }
+
 
     if (user == "none") {
         content_var = null
@@ -172,9 +186,9 @@ async function automatedResponse(interaction, user, reason) {
 
 
     let template = {
-            "content": content_var,
+            "content": null,
             "embeds": [{
-                "description": reason,
+                "description": thisReason,
                 "color": 16711767,
                 "footer": {
                     "text": "Kline Support",
@@ -188,6 +202,9 @@ async function automatedResponse(interaction, user, reason) {
         }
         //delete the last message in a channel
     await client.channels.cache.get(interaction.channel.id).send(template)
+    if (content_var != null) {
+        await client.channels.cache.get(interaction.channel.id).send(`Pinging staff: ${content_var}`)
+    }
 
     execute(interaction)
 
@@ -534,7 +551,7 @@ async function execute(interaction) {
         content: `.`,
     });
     await interaction.deleteReply();
-    await interaction.channel.send(interaction.options.getString("string"));
+    //await interaction.channel.send(interaction.options.getString("string"));
 }
 
 const sendTweet = async(msg) => {
@@ -561,7 +578,7 @@ const login = () => {
 };
 
 
-//login();
+login();
 
 module.exports = {
     alertSkill,
