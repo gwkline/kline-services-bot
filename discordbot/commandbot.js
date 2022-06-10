@@ -154,6 +154,7 @@ async function dateCheck(message) {
 
     const inventoryJson = await fetch(`https://shoppy.gg/api/v1/orders/${order_id}`, options);
     let order = await inventoryJson.json();
+    console.log(order)
     if (order.paid_at == null) {
         await message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: Not yet paid`)
         return;
@@ -161,6 +162,40 @@ async function dateCheck(message) {
     let date_unformatted = order.paid_at
     let date = date_unformatted.split("T")[0]
     let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
+
+    let template = {
+        "content": null,
+        "embeds": [{
+            "title": "__Order Checker__",
+            "description": "** **",
+            "color": 16711767,
+            "fields": [{
+                    "name": "Order Date:",
+                    "value": `${order.paid_at}`
+                },
+                {
+                    "name": "Account Type:",
+                    "value": `${order.product.title}`
+                },
+                {
+                    "name": "Order Quantity:",
+                    "value": `${order.quantity}`
+                },
+                {
+                    "name": "Payment Method:",
+                    "value": `${order.gateway}`
+                }
+            ],
+            "footer": {
+                "text": "Kline Services",
+                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
+            },
+            "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+        }],
+        "username": "Kline Services",
+        "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+        "attachments": []
+    }
 
     message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: ${pretty_date}`)
 
