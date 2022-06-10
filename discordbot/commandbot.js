@@ -197,7 +197,7 @@ async function dateCheck(message) {
         "attachments": []
     }
 
-    message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: ${pretty_date}`)
+    message.reply(template)
 
 }
 
