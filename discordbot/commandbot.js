@@ -154,7 +154,6 @@ async function dateCheck(message) {
 
     const inventoryJson = await fetch(`https://shoppy.gg/api/v1/orders/${order_id}`, options);
     let order = await inventoryJson.json();
-    console.log(order)
     if (order.paid_at == null) {
         await message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: Not yet paid`)
         return;
@@ -171,7 +170,7 @@ async function dateCheck(message) {
             "color": 16711767,
             "fields": [{
                     "name": "Order Date:",
-                    "value": `${order.paid_at.split("T")[0]}`,
+                    "value": `${pretty_date}`,
                 },
                 {
                     "name": "Account Type:",
