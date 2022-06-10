@@ -171,7 +171,7 @@ async function dateCheck(message) {
             "color": 16711767,
             "fields": [{
                     "name": "Order Date:",
-                    "value": `${order.paid_at}`
+                    "value": `${order.paid_at.split("T")[0]}`,
                 },
                 {
                     "name": "Account Type:",
