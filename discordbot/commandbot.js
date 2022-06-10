@@ -14,7 +14,6 @@ let reasons = {
     "not-oc": "Unfortunately we generally don't do replacements on our Oneclick Gmails because they're farmed for over a month in most cases and are tested multiple times to ensure they are true Oneclicks. If you would like, staff can look over your farming setup and give you suggestion on how to improve account help. If this is the case, please ping gkline#2534."
 }
 
-
 const client = new Discord.Client({
     disableEveryone: true,
     partials: ["MESSAGE", "CHANNEL", "REACTION", "GUILD_MEMBER", "USER"],
@@ -229,7 +228,9 @@ async function inStockCommand(type, interaction) {
                 },
                 "thumbnail": {
                     "url": "https://i.imgur.com/M5w2jAS.png"
-                }
+                },
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+
             }
         ],
         "username": "Kline Accounts",
@@ -311,7 +312,8 @@ async function updateStock(type, interaction) {
                 },
                 "thumbnail": {
                     "url": "https://i.imgur.com/M5w2jAS.png"
-                }
+                },
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
             }
         ],
         "username": "Kline Accounts",
@@ -569,9 +571,7 @@ const sendTweet = async(msg) => {
 }
 
 const login = () => {
-    //client.login('ODg3ODY2MjA5NTc0NDc3ODg2.YUKX2A.yok34z8DHiM7iFu1m8eZKgz1nWU') //testing
-    client.login('OTM4OTE1MDM3MDIyNjc1MDQ1.YfxOxQ.MauL-bwvGH2yz5iMkEIdae9WfIk') //production
-        //ticket.ticket_setup()
+    client.login(process.env.DISCORD_BOT_TOKEN)
 
 };
 

@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.post('/api/log-order', async (req, res) => {
+app.post('/api/log-order', async(req, res) => {
     try {
         console.log(await logOrder(req.body))
         res.sendStatus(201);
@@ -113,7 +113,6 @@ async function logOrder(body) {
 
         if (WHITELIST.includes(orders.product.title)) {
 
-            commandbot.alertSkill(order)
             const auth = new google.auth.GoogleAuth({
                 keyFile: "./config/credentials.json",
                 scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -147,7 +146,7 @@ async function convertCurrency() {
     return conv
 
 }
-process.on('uncaughtException', function (exception) {
+process.on('uncaughtException', function(exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")
