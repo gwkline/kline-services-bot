@@ -52,11 +52,6 @@ client.on('interactionCreate', async interaction => {
 
     switch (interaction.options._hoistedOptions[0].value) {
 
-        case "date-check":
-            console.log(interaction.message)
-            await dateCheck(interaction.message)
-            break;
-
         case "replace-gmail":
             await automatedResponse(interaction, "361910844143173632", "replace-gmail")
             break;
@@ -140,10 +135,6 @@ client.on('message', async(msg) => {
         await client.application.commands.create(support_command);
         await client.application.commands.create(stock_command);
     }
-
-    if (msg.content.toLowerCase().includes('!check') && msg.channel.id === "785355394444296196") {
-        await dateCheck(msg)
-    }
 });
 
 
@@ -163,7 +154,6 @@ async function dateCheck(order_id, interaction) {
 
     let template
     if (order.paid_at == null) {
-        console.log(order)
         let date_unformatted = order.created_at
         let date = date_unformatted.split("T")[0]
         let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
@@ -188,6 +178,10 @@ async function dateCheck(order_id, interaction) {
                     {
                         "name": "Payment Method:",
                         "value": `${order.gateway}`
+                    },
+                    {
+                        "name": "Payment Status:",
+                        "value": `Not paid yet / not updated`
                     }
                 ],
                 "footer": {
@@ -225,6 +219,10 @@ async function dateCheck(order_id, interaction) {
                     {
                         "name": "Payment Method:",
                         "value": `${order.gateway}`
+                    },
+                    {
+                        "name": "Payment Status:",
+                        "value": `Paid`
                     }
                 ],
                 "footer": {
@@ -246,7 +244,6 @@ async function dateCheck(order_id, interaction) {
 async function automatedResponse(interaction, user, reason) {
 
     let thisReason = reasons[reason]
-    console.log()
     if (reason == "replace-gmail" || reason == "reverify-gmail" || reason == "replace-amazon" || reason == "replace-flx") {
         interaction.channel.setName(reason)
     }
@@ -642,7 +639,7 @@ const sendTweet = async(msg) => {
         .then(body => {
             return msg.reply(body["message"]);
         }).catch(err => {
-            console.log(err)
+            print(err)
             airbrake.notify(err)
         })
 }
