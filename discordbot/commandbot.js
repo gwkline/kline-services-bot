@@ -160,6 +160,10 @@ async function dateCheck(message) {
 
     let template
     if (order.paid_at == null) {
+        console.log(order)
+        let date_unformatted = order.created_at
+        let date = date_unformatted.split("T")[0]
+        let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
         template = {
             "content": null,
             "embeds": [{
