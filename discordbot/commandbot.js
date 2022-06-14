@@ -45,6 +45,11 @@ client.on('interactionCreate', async interaction => {
         return;
     }
 
+    if (interaction.commandName === "check") {
+        dateCheck(interaction.options.get("order_id").value, interaction)
+        return;
+    }
+
     switch (interaction.options._hoistedOptions[0].value) {
 
         case "date-check":
@@ -142,9 +147,7 @@ client.on('message', async(msg) => {
 });
 
 
-async function dateCheck(message) {
-
-    let order_id = message.content.split(" ")[1]
+async function dateCheck(order_id, interaction) {
 
     let options = {
         'method': 'GET',
@@ -236,7 +239,7 @@ async function dateCheck(message) {
         }
     }
 
-    message.reply(template)
+    interaction.reply(template)
 
 }
 

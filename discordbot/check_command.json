@@ -1,12 +1,10 @@
 {
     "name": "check",
-    "description": "Check the date of an order",
-    "type": 1,
+    "description": "Check the status of an order",
     "options": [{
-        "name": "order id",
         "type": 3,
-        "description": "Type out your suggestion",
-        "required": true,
-        "default": ""
+        "name": "order_id",
+        "description": "Please enter the Order ID",
+        "required": true
     }]
 }
