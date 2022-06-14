@@ -154,46 +154,79 @@ async function dateCheck(message) {
 
     const inventoryJson = await fetch(`https://shoppy.gg/api/v1/orders/${order_id}`, options);
     let order = await inventoryJson.json();
-    if (order.paid_at == null) {
-        await message.reply(`Order ID: ${order_id}\nProduct: ${order.product.title}\nDate: Not yet paid`)
-        return;
-    }
     let date_unformatted = order.paid_at
     let date = date_unformatted.split("T")[0]
     let pretty_date = date.split("-")[1] + "/" + date.split("-")[2] + "/" + date.split("-")[0]
 
-    let template = {
-        "content": null,
-        "embeds": [{
-            "title": "__Order Checker__",
-            "description": "** **",
-            "color": 16711767,
-            "fields": [{
-                    "name": "Order Date:",
-                    "value": `${pretty_date}`,
+    let template
+    if (order.paid_at == null) {
+        template = {
+            "content": null,
+            "embeds": [{
+                "title": "__Order Checker__",
+                "description": "** **",
+                "color": 16711767,
+                "fields": [{
+                        "name": "Order Date:",
+                        "value": `${pretty_date}`,
+                    },
+                    {
+                        "name": "Account Type:",
+                        "value": `${order.product.title}`
+                    },
+                    {
+                        "name": "Order Quantity:",
+                        "value": `${order.quantity}`
+                    },
+                    {
+                        "name": "Payment Method:",
+                        "value": `${order.gateway}`
+                    }
+                ],
+                "footer": {
+                    "text": "Kline Services",
+                    "icon_url": "https://i.imgur.com/unCJSO7.jpg"
                 },
-                {
-                    "name": "Account Type:",
-                    "value": `${order.product.title}`
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+            }],
+            "username": "Kline Services",
+            "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+            "attachments": []
+        }
+    } else {
+        template = {
+            "content": null,
+            "embeds": [{
+                "title": "__Order Checker__",
+                "description": "** **",
+                "color": 16711767,
+                "fields": [{
+                        "name": "Order Date:",
+                        "value": `${pretty_date}`,
+                    },
+                    {
+                        "name": "Account Type:",
+                        "value": `${order.product.title}`
+                    },
+                    {
+                        "name": "Order Quantity:",
+                        "value": `${order.quantity}`
+                    },
+                    {
+                        "name": "Payment Method:",
+                        "value": `${order.gateway}`
+                    }
+                ],
+                "footer": {
+                    "text": "Kline Services",
+                    "icon_url": "https://i.imgur.com/unCJSO7.jpg"
                 },
-                {
-                    "name": "Order Quantity:",
-                    "value": `${order.quantity}`
-                },
-                {
-                    "name": "Payment Method:",
-                    "value": `${order.gateway}`
-                }
-            ],
-            "footer": {
-                "text": "Kline Services",
-                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
-            },
-            "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
-        }],
-        "username": "Kline Services",
-        "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
-        "attachments": []
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+            }],
+            "username": "Kline Services",
+            "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+            "attachments": []
+        }
     }
 
     message.reply(template)
