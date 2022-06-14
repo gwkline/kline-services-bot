@@ -1,0 +1,12 @@
+{
+    "name": "check",
+    "description": "Check the date of an order",
+    "type": 1,
+    "options": [{
+        "name": "order id",
+        "type": 3,
+        "description": "Type out your suggestion",
+        "required": true,
+        "default": ""
+    }]
+}

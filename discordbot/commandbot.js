@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
-const command = require("./stock_command.json")
+const stock_command = require("./stock_command.json")
+const check_command = require("./check_command.json")
+
 const config = require("../config/config.json");
 const utils = require("../utils");
 const fetch = require('node-fetch');
@@ -94,7 +96,7 @@ client.on('message', async(msg) => {
 
     if (msg.content.toLowerCase().includes('!deploy') && msg.author.id === client.application.owner.id) {
         msg.reply('Deploying...')
-        let support = {
+        let support_command = {
             "name": "support",
             "description": "Respond to customer issues",
             "options": [{
@@ -129,8 +131,9 @@ client.on('message', async(msg) => {
                 ]
             }]
         }
-        await client.application.commands.create(command);
-        await client.application.commands.create(support);
+        await client.application.commands.create(check_command);
+        await client.application.commands.create(support_command);
+        await client.application.commands.create(stock_command);
     }
 
     if (msg.content.toLowerCase().includes('!check') && msg.channel.id === "785355394444296196") {
