@@ -8,5 +8,5 @@ function showCard(selector, element) {
 
 
 window.onload = () => {
-    showCard('.yummy-nike');
+    showCard('.yummy-gmail');
 }

@@ -5,7 +5,7 @@ const { google } = require("googleapis");
 const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const console = require('console');
-const commandbot = require("./discordbot/commandbot");
+require("./discordbot/commandbot");
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
