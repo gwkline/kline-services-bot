@@ -87,6 +87,15 @@ client.on('interactionCreate', async interaction => {
 client.on('message', async(msg) => {
     if (msg.author.bot) return;
     if (!client.application.owner) await client.application.fetch();
+    
+        //SUCCESS TWEET
+    if (msg.channelId == "785553745433591808" && msg.author.id != "361910844143173632") {
+        // send the message and wait for it to be sent
+        await msg.react("✅")
+        await msg.react("❌")
+    }
+
+    
     //SUCCESS TWEET
     if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
         // send the message and wait for it to be sent
