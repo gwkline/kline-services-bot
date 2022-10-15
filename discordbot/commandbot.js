@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const stock_command = require("./stock_command.json")
 const check_command = require("./check_command.json")
-
+const { google } = require("googleapis");
 const config = require("../config/config.json");
 const utils = require("../utils");
 const fetch = require('node-fetch');
@@ -22,7 +22,7 @@ const client = new Discord.Client({
     intents: ['GUILD_MEMBERS', 'GUILDS', 'DIRECT_MESSAGES', 'GUILD_MESSAGES']
 });
 
-client.on("ready", async(e) => {
+client.on("ready", async (e) => {
     console.log("Successfully logged in")
     client.user.setStatus('available')
     client.user.setPresence({
@@ -84,18 +84,40 @@ client.on('interactionCreate', async interaction => {
 
 });
 
-client.on('message', async(msg) => {
+client.on('messageCreate', async (msg) => {
+
+    if (msg.channelId == "906613922830880768") {
+
+        let values = [convertEpochToSpecificTimezone(msg.createdTimestamp, -4)]
+        let holder = msg.embeds[0].fields
+
+        for (i = 0; i < holder.length; i++) {
+            if (i == 2 || i == 3 || i == 4 || i == 9) {
+                //
+            } else if (i == 10) {
+                values.push(holder[i].value.replaceAll("||", "").split(" ")[0])
+                values.push(holder[i].value.replaceAll("||", ""))
+            }
+            else {
+                values.push(holder[i].value.replaceAll("||", ""))
+            }
+        }
+
+        values = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
+
+        await logCheckout(values)
+    }
+
     if (msg.author.bot) return;
     if (!client.application.owner) await client.application.fetch();
-    
-        //SUCCESS TWEET
+
+    //SUCCESS TWEET
     if (msg.channelId == "785553745433591808" && msg.author.id != "361910844143173632") {
         // send the message and wait for it to be sent
         await msg.react("✅")
         await msg.react("❌")
     }
 
-    
     //SUCCESS TWEET
     if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
         // send the message and wait for it to be sent
@@ -114,29 +136,29 @@ client.on('message', async(msg) => {
                 "description": "Which issue to address",
                 "required": true,
                 "choices": [{
-                        "name": "Replace Gmail",
-                        "value": "replace-gmail"
-                    },
-                    {
-                        "name": "Reverify Gmail",
-                        "value": "reverify-gmail"
-                    },
-                    {
-                        "name": "Replace Amazon",
-                        "value": "replace-amazon"
-                    },
-                    {
-                        "name": "Replace FLX",
-                        "value": "replace-flx"
-                    },
-                    {
-                        "name": "Too Long",
-                        "value": "too-long"
-                    },
-                    {
-                        "name": "Not Oneclick Yet",
-                        "value": "not-oc"
-                    }
+                    "name": "Replace Gmail",
+                    "value": "replace-gmail"
+                },
+                {
+                    "name": "Reverify Gmail",
+                    "value": "reverify-gmail"
+                },
+                {
+                    "name": "Replace Amazon",
+                    "value": "replace-amazon"
+                },
+                {
+                    "name": "Replace FLX",
+                    "value": "replace-flx"
+                },
+                {
+                    "name": "Too Long",
+                    "value": "too-long"
+                },
+                {
+                    "name": "Not Oneclick Yet",
+                    "value": "not-oc"
+                }
                 ]
             }]
         }
@@ -146,6 +168,27 @@ client.on('message', async(msg) => {
     }
 });
 
+async function logCheckout(input_values) {
+
+    const auth = new google.auth.GoogleAuth({
+        keyFile: "./config/credentials.json",
+        scopes: "https://www.googleapis.com/auth/spreadsheets",
+    });
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: "v4", auth: client });
+    const spreadsheetId = "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y";
+    googleSheets.spreadsheets.values.append({
+        auth,
+        spreadsheetId,
+        range: "Hits!A:A",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            values: [
+                input_values
+            ],
+        },
+    });
+}
 
 async function dateCheck(order_id, interaction) {
 
@@ -173,31 +216,31 @@ async function dateCheck(order_id, interaction) {
                 "description": "** **",
                 "color": 16711767,
                 "fields": [{
-                        "name": "Order Date:",
-                        "value": `${pretty_date}`,
-                    },
-                    {
-                        "name": "Account Type:",
-                        "value": `${order.product.title}`
-                    },
-                    {
-                        "name": "Order Quantity:",
-                        "value": `${order.quantity}`
-                    },
-                    {
-                        "name": "Payment Method:",
-                        "value": `${order.gateway}`
-                    },
-                    {
-                        "name": "Payment Status:",
-                        "value": `Not paid yet / not updated`
-                    }
+                    "name": "Order Date:",
+                    "value": `${pretty_date}`,
+                },
+                {
+                    "name": "Account Type:",
+                    "value": `${order.product.title}`
+                },
+                {
+                    "name": "Order Quantity:",
+                    "value": `${order.quantity}`
+                },
+                {
+                    "name": "Payment Method:",
+                    "value": `${order.gateway}`
+                },
+                {
+                    "name": "Payment Status:",
+                    "value": `Not paid yet / not updated`
+                }
                 ],
                 "footer": {
                     "text": "Kline Services",
                     "icon_url": "https://i.imgur.com/unCJSO7.jpg"
                 },
-                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}`
             }],
             "username": "Kline Services",
             "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
@@ -214,31 +257,31 @@ async function dateCheck(order_id, interaction) {
                 "description": "** **",
                 "color": 16711767,
                 "fields": [{
-                        "name": "Order Date:",
-                        "value": `${pretty_date}`,
-                    },
-                    {
-                        "name": "Account Type:",
-                        "value": `${order.product.title}`
-                    },
-                    {
-                        "name": "Order Quantity:",
-                        "value": `${order.quantity}`
-                    },
-                    {
-                        "name": "Payment Method:",
-                        "value": `${order.gateway}`
-                    },
-                    {
-                        "name": "Payment Status:",
-                        "value": `Paid`
-                    }
+                    "name": "Order Date:",
+                    "value": `${pretty_date}`,
+                },
+                {
+                    "name": "Account Type:",
+                    "value": `${order.product.title}`
+                },
+                {
+                    "name": "Order Quantity:",
+                    "value": `${order.quantity}`
+                },
+                {
+                    "name": "Payment Method:",
+                    "value": `${order.gateway}`
+                },
+                {
+                    "name": "Payment Status:",
+                    "value": `Paid`
+                }
                 ],
                 "footer": {
                     "text": "Kline Services",
                     "icon_url": "https://i.imgur.com/unCJSO7.jpg"
                 },
-                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}`
             }],
             "username": "Kline Services",
             "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
@@ -266,21 +309,21 @@ async function automatedResponse(interaction, user, reason) {
 
 
     let template = {
-            "content": null,
-            "embeds": [{
-                "description": thisReason,
-                "color": 16711767,
-                "footer": {
-                    "text": "Kline Support",
-                    "icon_url": "https://i.imgur.com/unCJSO7.jpg"
-                },
-                "timestamp": "2022-06-09T04:36:00.000Z"
-            }],
-            "username": "Kline Services",
-            "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
-            "attachments": []
-        }
-        //delete the last message in a channel
+        "content": null,
+        "embeds": [{
+            "description": thisReason,
+            "color": 16711767,
+            "footer": {
+                "text": "Kline Support",
+                "icon_url": "https://i.imgur.com/unCJSO7.jpg"
+            },
+            "timestamp": "2022-06-09T04:36:00.000Z"
+        }],
+        "username": "Kline Services",
+        "avatar_url": "https://i.imgur.com/unCJSO7.jpg",
+        "attachments": []
+    }
+    //delete the last message in a channel
     await client.channels.cache.get(interaction.channel.id).send(template)
     if (content_var != null) {
         await client.channels.cache.get(interaction.channel.id).send(`Pinging staff: ${content_var}`)
@@ -295,26 +338,26 @@ async function inStockCommand(type, interaction) {
     let template = {
         "content": null,
         "embeds": [{
-                "url": "https://discord.gg/ybFm6uMRvA",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/7XQ0QeN.png"
-                }
-            },
-            {
-                "title": "__***Product Stock Checker:***__",
-                "url": "https://klineaccounts.com/",
-                "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/GCNBr54.png"
-                },
-                "thumbnail": {
-                    "url": "https://i.imgur.com/M5w2jAS.png"
-                },
-                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
-
+            "url": "https://discord.gg/ybFm6uMRvA",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/7XQ0QeN.png"
             }
+        },
+        {
+            "title": "__***Product Stock Checker:***__",
+            "url": "https://klineaccounts.com/",
+            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/GCNBr54.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/M5w2jAS.png"
+            },
+            "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}`
+
+        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -379,25 +422,25 @@ async function updateStock(type, interaction) {
     let template = {
         "content": null,
         "embeds": [{
-                "url": "https://discord.gg/ybFm6uMRvA",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/7XQ0QeN.png"
-                }
-            },
-            {
-                "title": "__***Kline Accounts Stock:***__",
-                "url": "https://klineaccounts.com/",
-                "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
-                "color": 15868505,
-                "image": {
-                    "url": "https://i.imgur.com/GCNBr54.png"
-                },
-                "thumbnail": {
-                    "url": "https://i.imgur.com/M5w2jAS.png"
-                },
-                "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '') }`
+            "url": "https://discord.gg/ybFm6uMRvA",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/7XQ0QeN.png"
             }
+        },
+        {
+            "title": "__***Kline Accounts Stock:***__",
+            "url": "https://klineaccounts.com/",
+            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
+            "color": 15868505,
+            "image": {
+                "url": "https://i.imgur.com/GCNBr54.png"
+            },
+            "thumbnail": {
+                "url": "https://i.imgur.com/M5w2jAS.png"
+            },
+            "timestamp": `${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}`
+        }
         ],
         "username": "Kline Accounts",
         "avatar_url": "https://i.imgur.com/unCJSO7.jpg"
@@ -575,21 +618,21 @@ async function alertSkill(order) {
             "url": "https://docs.google.com/spreadsheets/d/1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM/",
             "color": 16711767,
             "fields": [{
-                    "name": "Timestamp:",
-                    "value": "1"
-                },
-                {
-                    "name": "Order ID:",
-                    "value": "2"
-                },
-                {
-                    "name": "Email:",
-                    "value": "3"
-                },
-                {
-                    "name": "Product:",
-                    "value": "4"
-                }
+                "name": "Timestamp:",
+                "value": "1"
+            },
+            {
+                "name": "Order ID:",
+                "value": "2"
+            },
+            {
+                "name": "Email:",
+                "value": "3"
+            },
+            {
+                "name": "Product:",
+                "value": "4"
+            }
             ],
             "footer": {
                 "text": "Kline Services",
@@ -608,26 +651,26 @@ async function alertSkill(order) {
 
 }
 
-async function createACOForm(type) {
-    const auth = new google.auth.GoogleAuth({
-        keyFile: "../config/credentials.json",
-        scopes: "https://www.googleapis.com/auth/forms",
-    });
-    const client = await auth.getClient();
-    const googleForms = google.forms({ version: "v4", auth: client });
-    const formID = "HI";
-    googleForms.forms.values.append({
-        auth,
-        spreadsheetId,
-        range: "Sheet1!A:A",
-        valueInputOption: "USER_ENTERED",
-        resource: {
-            values: [
-                [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
-            ],
-        },
-    });
-}
+// async function createACOForm(type) {
+//     const auth = new google.auth.GoogleAuth({
+//         keyFile: "../config/credentials.json",
+//         scopes: "https://www.googleapis.com/auth/forms",
+//     });
+//     const client = await auth.getClient();
+//     const googleForms = google.forms({ version: "v4", auth: client });
+//     const formID = "HI";
+//     googleForms.forms.values.append({
+//         auth,
+//         spreadsheetId,
+//         range: "Sheet1!A:A",
+//         valueInputOption: "USER_ENTERED",
+//         resource: {
+//             values: [
+//                 [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
+//             ],
+//         },
+//     });
+// }
 
 async function execute(interaction) {
     await interaction.reply({
@@ -637,7 +680,7 @@ async function execute(interaction) {
     //await interaction.channel.send(interaction.options.getString("string"));
 }
 
-const sendTweet = async(msg) => {
+const sendTweet = async (msg) => {
     let username = msg.author.username
     let image_link = msg.attachments.at(0).attachment
     let content = msg.content
@@ -654,10 +697,50 @@ const sendTweet = async(msg) => {
 }
 
 const login = () => {
+
     client.login(process.env.DISCORD_BOT_TOKEN)
+}
 
-};
+// async function fuck() {
+//     let channel = await client.channels.fetch("906613922830880768")
+//     let messages = await channel.messages.fetch({ limit: 100 });
+//     messages = [...messages].reverse()
 
+//     var counter = 0;
+//     var limit = 99;
+//     let values = []
+//     var myVar = setInterval(function () {
+//         if (counter > limit) {
+//             clearInterval(myVar);
+//         }
+//         values = [convertEpochToSpecificTimezone(messages[counter][1].createdTimestamp, -4)]
+//         counter++;
+//         let holder = messages[counter][1].embeds[0].fields
+//         for (i = 0; i < holder.length; i++) {
+//             if (i == 2 || i == 3 || i == 4 || i == 9) {
+//                 //
+//             } else if (i == 10) {
+//                 values.push(holder[i].value.replaceAll("||", "").split(" ")[0])
+//                 values.push(holder[i].value.replaceAll("||", ""))
+//             }
+//             else {
+//                 values.push(holder[i].value.replaceAll("||", ""))
+//             }
+//         }
+//         values = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
+
+
+//         logCheckout(values)
+//     }, 1200);
+
+// }
+
+function convertEpochToSpecificTimezone(timeEpoch, offset) {
+    var d = new Date(timeEpoch);
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);  //This converts to UTC 00:00
+    var nd = new Date(utc + (3600000 * offset));
+    return nd.toLocaleString();
+}
 
 login();
 
@@ -665,7 +748,6 @@ module.exports = {
     alertSkill,
     inStockCommand,
     sendTweet,
-    createACOForm,
     updateStock,
     restockPing
 }
