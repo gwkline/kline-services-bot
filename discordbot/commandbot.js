@@ -550,8 +550,13 @@ async function restockPing(stockMessage, template) {
                     roleArray["979482355708330014"].push(prodTitle)
                     break;
 
-                case "X2 FLX Accounts":
-                case "X3 FLX Accounts":
+                case "X3 FLX Accounts (750k+)":
+                case "X3 FLX Accounts (500k-750k)":
+                case "X3 FLX Accounts (350k-500k)":
+                case "X3 FLX Accounts (250k-350k)":
+                case "X3 FLX Accounts (100k-250k)":
+                case "X3 FLX Accounts (0-100k)":
+
 
                     roleArray["979482676916527165"].push(prodTitle)
                     break;
