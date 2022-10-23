@@ -431,7 +431,7 @@ async function updateStock(type, interaction) {
         {
             "title": "__***Kline Accounts Stock:***__",
             "url": "https://klineaccounts.com/",
-            "description": "Oneclick Gmails (With Proxy): [stocknum]\nOne-Click Gmail Accounts: [stocknum]\nFarmed Gmails (With Proxy): [stocknum]\nFarmed Gmail Accounts: [stocknum]\n\nAged Gmail Accounts: [stocknum]\nEDU Gmail Accounts: [stocknum]\nPrime EDU Gmail Accounts: [stocknum]\n\nForwarded Gmail Accounts (Pack of 21): [stocknum]\n\nAged Amazon Account: [stocknum]\nFresh BestBuy Accounts: [stocknum]\nFresh Target Account: [stocknum]\nFresh SSense Accounts: [stocknum]\nFresh Walmart Accounts: [stocknum]\n\nGold Nike Accounts: [stocknum]\nPlatinum Nike Accounts: [stocknum]\nGmail + Gold Combo: [stocknum]\nGmail + Platinum Combo: [stocknum]\n\nX2 FLX Accounts: [stocknum]\nX3 FLX Accounts: [stocknum]",
+            "description": "X3 FLX Accounts (0-100k): [stocknum]\nX3 FLX Accounts (100k-250k): [stocknum]\nX3 FLX Accounts (250k-350k): [stocknum]\nX3 FLX Accounts (350k-500k): [stocknum]\nX3 FLX Accounts (500k-750k): [stocknum]\nX3 FLX Accounts (750k+): [stocknum]\n\nAged Amazon Account: [stocknum]\n",
             "color": 15868505,
             "image": {
                 "url": "https://i.imgur.com/GCNBr54.png"
