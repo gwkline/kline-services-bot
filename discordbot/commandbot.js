@@ -481,6 +481,7 @@ async function updateStock(type, interaction) {
 
     stockMessage = (await stock_channel.guild.channels.cache.get("976883417352376330").messages.fetch({ "cache": true })).last()
 
+    console.log(stockMessage.embeds[1].description)
     restockPing(stockMessage, template)
 
     if (stockMessage != undefined) {
@@ -491,6 +492,9 @@ async function updateStock(type, interaction) {
 }
 
 async function restockPing(stockMessage, template) {
+
+
+
     let newStock = template.embeds[1].description.split("\n")
     let oldStock = stockMessage.embeds[1].description.split("\n")
     let prodStockNew = -1
