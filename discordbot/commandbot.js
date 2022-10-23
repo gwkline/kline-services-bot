@@ -431,7 +431,7 @@ async function updateStock(type, interaction) {
         {
             "title": "__***Kline Accounts Stock:***__",
             "url": "https://klineaccounts.com/",
-            "description": "X3 FLX Accounts (0-100k): [stocknum]\nX3 FLX Accounts (100k-250k): [stocknum]\nX3 FLX Accounts (250k-350k): [stocknum]\nX3 FLX Accounts (350k-500k): [stocknum]\nX3 FLX Accounts (500k-750k): [stocknum]\nX3 FLX Accounts (750k+): [stocknum]\n\nAged Amazon Account: [stocknum]\n",
+            "description": "X3 FLX Accounts (0-100k): [stocknum]\nX3 FLX Accounts (100k-250k): [stocknum]\nX3 FLX Accounts (250k-350k): [stocknum]\nX3 FLX Accounts (350k-500k): [stocknum]\nX3 FLX Accounts (500k-750k): [stocknum]\nX3 FLX Accounts (750k+): [stocknum]\nAged Amazon Account: [stocknum]\n",
             "color": 15868505,
             "image": {
                 "url": "https://i.imgur.com/GCNBr54.png"
