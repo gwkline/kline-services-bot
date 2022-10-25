@@ -108,6 +108,20 @@ client.on('messageCreate', async (msg) => {
         await logCheckout(values)
     }
 
+    if (msg.channelId == "999573736099418226") {
+
+        let values = [convertEpochToSpecificTimezone(msg.createdTimestamp, -4)]
+        let holder = msg.embeds[0].fields
+
+        for (i = 0; i < holder.length; i++) {
+            values.push(holder[i].value.replaceAll("||", ""))
+        }
+
+        values = [values[0], values[9].split(" ")[0], values[1], values[2], values[7], values[8].replaceAll("http://", "").replace("/", ""), values[9], values[10]]
+
+        await logDecline(values)
+    }
+
     if (msg.author.bot) return;
     if (!client.application.owner) await client.application.fetch();
 
@@ -181,6 +195,28 @@ async function logCheckout(input_values) {
         auth,
         spreadsheetId,
         range: "Hits!A:A",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            values: [
+                input_values
+            ],
+        },
+    });
+}
+
+async function logDecline(input_values) {
+
+    const auth = new google.auth.GoogleAuth({
+        keyFile: "./config/credentials.json",
+        scopes: "https://www.googleapis.com/auth/spreadsheets",
+    });
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: "v4", auth: client });
+    const spreadsheetId = "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y";
+    googleSheets.spreadsheets.values.append({
+        auth,
+        spreadsheetId,
+        range: "Declines!A:A",
         valueInputOption: "USER_ENTERED",
         resource: {
             values: [
@@ -431,7 +467,7 @@ async function updateStock(type, interaction) {
         {
             "title": "__***Kline Accounts Stock:***__",
             "url": "https://klineaccounts.com/",
-            "description": "X3 FLX Accounts (0-100k): [stocknum]\nX3 FLX Accounts (100k-250k): [stocknum]\nX3 FLX Accounts (250k-350k): [stocknum]\nX3 FLX Accounts (350k-500k): [stocknum]\nX3 FLX Accounts (500k-750k): [stocknum]\nX3 FLX Accounts (750k+): [stocknum]\nAged Amazon Account: [stocknum]\n",
+            "description": "X3 FLX Accounts (0-100k): [stocknum]\nX3 FLX Accounts (100k-250k): [stocknum]\nX3 FLX Accounts (250k-350k): [stocknum]\nX3 FLX Accounts (350k-500k): [stocknum]\nX3 FLX Accounts (500k-750k): [stocknum]\nX3 FLX Accounts (750k+): [stocknum]\nAged Amazon Account: [stocknum]",
             "color": 15868505,
             "image": {
                 "url": "https://i.imgur.com/GCNBr54.png"
@@ -496,7 +532,6 @@ async function restockPing(stockMessage, template) {
 
     let newStock = template.embeds[1].description.split("\n")
     let oldStock = stockMessage.embeds[1].description.split("\n")
-    console.log(oldStock)
     let prodStockNew = -1
     let prodStockOld = -1
     let prodTitle = ""
