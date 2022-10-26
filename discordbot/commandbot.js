@@ -106,6 +106,12 @@ client.on('messageCreate', async (msg) => {
         values = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
 
         await logCheckout(values)
+
+        if (values[1] == "Richard") {
+            values = [values[0], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[9]]
+            await logRichard(values)
+        }
+
     }
 
     if (msg.channelId == "999573736099418226") {
@@ -195,6 +201,28 @@ async function logCheckout(input_values) {
         auth,
         spreadsheetId,
         range: "Hits!A:A",
+        valueInputOption: "USER_ENTERED",
+        resource: {
+            values: [
+                input_values
+            ],
+        },
+    });
+}
+
+async function logRichard(input_values) {
+
+    const auth = new google.auth.GoogleAuth({
+        keyFile: "./config/credentials.json",
+        scopes: "https://www.googleapis.com/auth/spreadsheets",
+    });
+    const client = await auth.getClient();
+    const googleSheets = google.sheets({ version: "v4", auth: client });
+    const spreadsheetId = "1hzpLVtlBFJYlio3XUJYgbbOkPsS7gwaCOP5wzfeafJA";
+    googleSheets.spreadsheets.values.append({
+        auth,
+        spreadsheetId,
+        range: "Master!A:A",
         valueInputOption: "USER_ENTERED",
         resource: {
             values: [
