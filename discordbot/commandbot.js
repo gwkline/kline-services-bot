@@ -103,13 +103,12 @@ client.on('messageCreate', async (msg) => {
             }
         }
 
-        values = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
+        let [timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address] = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
 
-        await logCheckout(values)
+        await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address])
 
-        if (values[1] == "Richard") {
-            values = [values[0], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[9]]
-            await logRichard(values)
+        if (hit_for == "Richard") {
+            await logRichard([timestamp, shoe, size, email, order_num, address])
         }
 
     }
