@@ -86,6 +86,7 @@ client.on('interactionCreate', async interaction => {
 
 client.on('messageCreate', async (msg) => {
 
+    //Checkout Webhooks
     if (msg.channelId == "906613922830880768") {
 
         let values = [convertEpochToSpecificTimezone(msg.createdTimestamp, -4)]
@@ -105,14 +106,15 @@ client.on('messageCreate', async (msg) => {
 
         let [timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address] = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
 
-        await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address])
+        await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], "Hits", "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
 
         if (hit_for == "Richard") {
-            await logRichard([timestamp, shoe, size, email, order_num, address])
+            await logCheckout([timestamp, shoe, size, email, order_num, address], "Master", "1hzpLVtlBFJYlio3XUJYgbbOkPsS7gwaCOP5wzfeafJA")
         }
 
     }
 
+    //Decline Webhooks
     if (msg.channelId == "999573736099418226") {
 
         let values = [convertEpochToSpecificTimezone(msg.createdTimestamp, -4)]
@@ -122,26 +124,54 @@ client.on('messageCreate', async (msg) => {
             values.push(holder[i].value.replaceAll("||", ""))
         }
 
-        values = [values[0], values[9].split(" ")[0], values[1], values[2], values[7], values[8].replaceAll("http://", "").replace("/", ""), values[9], values[10]]
+        let [timestamp, hit_for, shoe, size, email, proxy, card, profile] = [values[0], values[9].split(" ")[0], values[1], values[2], values[7], values[8].replaceAll("http://", "").replace("/", ""), values[9], values[10]]
 
-        await logDecline(values)
+        await logCheckout([timestamp, hit_for, shoe, size, email, proxy, card, profile], "Declines", "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
     }
 
     if (msg.author.bot) return;
     if (!client.application.owner) await client.application.fetch();
 
-    //SUCCESS TWEET
+
+    roles = msg.mentions.roles
+    if (roles.size == 0) {
+        //
+    } else {
+
+        role = roles.first().id
+        if (role == "1036813184482414692") {
+
+            let userIds = [
+                "315179809619836928", //Jayy
+                "684482805866168379", //Grant
+                "361605221321015297", //Vyst
+                "554408746596564992", //JR
+                "693167707075641384", //Kevsito
+                "631566009471336448", //Chris
+                "915795487762812988"  //Richard
+            ]
+            for (users in userIds) {
+                try {
+                    let user = await client.users.fetch(userIds[users]);
+                    console.log(userIds[users])
+                    user.send(`<@${msg.author.id}> mentioned you in <#${msg.channel.id}>`);
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+        }
+    }
+
+    //Suggestions
     if (msg.channelId == "785553745433591808" && msg.author.id != "361910844143173632") {
         // send the message and wait for it to be sent
         await msg.react("✅")
         await msg.react("❌")
     }
 
-    //SUCCESS TWEET
+    //Success
     if (msg.channelId == "844543753691463740" && msg.attachments.size > 0) {
-        // send the message and wait for it to be sent
         await msg.reply(`Thanks for posting your success, ${msg.author}!`);
-        return sendTweet(msg)
     }
 
     if (msg.content.toLowerCase().includes('!deploy') && msg.author.id === client.application.owner.id) {
@@ -187,7 +217,7 @@ client.on('messageCreate', async (msg) => {
     }
 });
 
-async function logCheckout(input_values) {
+async function logCheckout(row, sheetName, spreadsheetId) {
 
     const auth = new google.auth.GoogleAuth({
         keyFile: "./config/credentials.json",
@@ -195,37 +225,14 @@ async function logCheckout(input_values) {
     });
     const client = await auth.getClient();
     const googleSheets = google.sheets({ version: "v4", auth: client });
-    const spreadsheetId = "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y";
     googleSheets.spreadsheets.values.append({
         auth,
         spreadsheetId,
-        range: "Hits!A:A",
+        range: `${sheetName}!A:A`,
         valueInputOption: "USER_ENTERED",
         resource: {
             values: [
-                input_values
-            ],
-        },
-    });
-}
-
-async function logRichard(input_values) {
-
-    const auth = new google.auth.GoogleAuth({
-        keyFile: "./config/credentials.json",
-        scopes: "https://www.googleapis.com/auth/spreadsheets",
-    });
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: "v4", auth: client });
-    const spreadsheetId = "1hzpLVtlBFJYlio3XUJYgbbOkPsS7gwaCOP5wzfeafJA";
-    googleSheets.spreadsheets.values.append({
-        auth,
-        spreadsheetId,
-        range: "Master!A:A",
-        valueInputOption: "USER_ENTERED",
-        resource: {
-            values: [
-                input_values
+                row
             ],
         },
     });
