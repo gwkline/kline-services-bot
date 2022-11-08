@@ -45,7 +45,25 @@ app.get('/', (req, res) => {
     // }
 });
 
-app.post('/api/log-order', async(req, res) => {
+app.get('/svelte', (req, res) => {
+
+    res.status(200).sendFile(path.join(__dirname, './project_enigma/index.html'));
+
+    // if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
+    //     console.log("Valid Cookie");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    // } else if (req.cookies.id_token == "invalid") {
+    //     console.log("Not in server");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    //     //non_member_index.html
+    // } else {
+    //     console.log("Needs login token");
+    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+    //     //loginindex.html
+    // }
+});
+
+app.post('/api/log-order', async (req, res) => {
     try {
         console.log(await logOrder(req.body))
         res.sendStatus(201);
@@ -146,7 +164,7 @@ async function convertCurrency() {
     return conv
 
 }
-process.on('uncaughtException', function(exception) {
+process.on('uncaughtException', function (exception) {
 
     if (exception.code == 503) {
         console.log("Discord is down")
