@@ -109,7 +109,7 @@ client.on('messageCreate', async (msg) => {
         await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], hit_for, "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
 
         if (hit_for == "Chris") {
-            await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], "Master", "1yw31vcPjK6bc5gafFP8tiMdyus4HdA9oFXK2Kc6bico")
+            await logCheckout([timestamp, shoe, size, order_num, email, address, "In Transit"], "Master", "1yw31vcPjK6bc5gafFP8tiMdyus4HdA9oFXK2Kc6bico")
         }
 
     }
