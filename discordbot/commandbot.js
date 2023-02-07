@@ -93,23 +93,17 @@ client.on('messageCreate', async (msg) => {
         let holder = msg.embeds[0].fields
 
         for (i = 0; i < holder.length; i++) {
-            if (i == 2 || i == 3 || i == 4 || i == 9) {
-                //
-            } else if (i == 10) {
-                values.push(holder[i].value.replaceAll("||", "").split(" ")[0])
-                values.push(holder[i].value.replaceAll("||", ""))
-            }
-            else {
-                values.push(holder[i].value.replaceAll("||", ""))
-            }
+            values.push(holder[i].value.replaceAll("||", ""))
         }
 
-        let [timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address] = [values[0], values[7], values[1], values[2], values[3].replace(" ", ""), values[4].replace('\n', ""), values[5].replaceAll("http://", "").replace("/", ""), values[6], values[8], values[9]]
 
-        await logCheckout([timestamp, hit_for, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], hit_for, "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
+        let [timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address] = [values[0], values[14].split(" ")[0], values[7], values[1], values[2], values[9], values[10], values[11].replaceAll("http://", "").replace("/", ""), values[12], values[14], values[15]]
+        console.log([timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address])
+
+        await logCheckout([timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], hit_for, "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
 
         if (hit_for == "Chris") {
-            await logCheckout([timestamp, shoe, size, order_num, email, address, "In Transit"], "Master", "1yw31vcPjK6bc5gafFP8tiMdyus4HdA9oFXK2Kc6bico")
+            await logCheckout([timestamp, sku, shoe, size, order_num, email, address, "In Transit"], "Master", "1yw31vcPjK6bc5gafFP8tiMdyus4HdA9oFXK2Kc6bico")
         }
 
     }
@@ -233,28 +227,6 @@ async function logCheckout(row, sheetName, spreadsheetId) {
         resource: {
             values: [
                 row
-            ],
-        },
-    });
-}
-
-async function logDecline(input_values) {
-
-    const auth = new google.auth.GoogleAuth({
-        keyFile: "./config/credentials.json",
-        scopes: "https://www.googleapis.com/auth/spreadsheets",
-    });
-    const client = await auth.getClient();
-    const googleSheets = google.sheets({ version: "v4", auth: client });
-    const spreadsheetId = "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y";
-    googleSheets.spreadsheets.values.append({
-        auth,
-        spreadsheetId,
-        range: "Declines!A:A",
-        valueInputOption: "USER_ENTERED",
-        resource: {
-            values: [
-                input_values
             ],
         },
     });
