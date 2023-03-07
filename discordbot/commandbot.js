@@ -138,11 +138,8 @@ client.on('messageCreate', async (msg) => {
             let userIds = [
                 "315179809619836928", //Jayy
                 "684482805866168379", //Grant
-                "361605221321015297", //Vyst
-                "554408746596564992", //JR
-                "693167707075641384", //Kevsito
                 "631566009471336448", //Chris
-                "915795487762812988"  //Richard
+                "654784227858055197"  //Jake
             ]
             for (users in userIds) {
                 try {
