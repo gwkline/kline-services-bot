@@ -1,20 +1,9 @@
 const Discord = require("discord.js");
-const stock_command = require("./stock_command.json")
-const check_command = require("./check_command.json")
 const { google } = require("googleapis");
-const config = require("../config/config.json");
+const config = require("../config.json");
 const utils = require("../utils");
 const fetch = require('node-fetch');
 require("dotenv").config();
-
-let reasons = {
-    "too-long": "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail, if this is something you are interested please tag gkline#2534.",
-    "replace-gmail": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
-    "reverify-gmail": "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
-    "replace-amazon": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
-    "replace-flx": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
-    "not-oc": "Unfortunately we generally don't do replacements on our Oneclick Gmails because they're farmed for over a month in most cases and are tested multiple times to ensure they are true Oneclicks. If you would like, staff can look over your farming setup and give you suggestion on how to improve account help. If this is the case, please ping gkline#2534."
-}
 
 const client = new Discord.Client({
     disableEveryone: true,
@@ -33,7 +22,7 @@ client.on("ready", async (e) => {
         }
     })
 
-    setInterval(updateStock, 1000 * 10)
+    //setInterval(updateStock, 1000 * 10)
 });
 
 client.on('interactionCreate', async interaction => {
@@ -49,6 +38,11 @@ client.on('interactionCreate', async interaction => {
         dateCheck(interaction.options.get("order_id").value, interaction)
         return;
     }
+
+    //     if (interaction.commandName === "ticket") {
+    //   console.log(`Setting up ticket channels for server: ${msg.guild.name}, ID: ${msg.guild.id}`)
+    //   return await ticket.ticket_setup(msg.guild)
+    //     }
 
     switch (interaction.options._hoistedOptions[0].value) {
 
@@ -100,10 +94,13 @@ client.on('messageCreate', async (msg) => {
         let [timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address] = [values[0], values[14].split(" ")[0], values[7], values[1], values[2], values[9], values[10], values[11].replaceAll("http://", "").replace("/", ""), values[12], values[14], values[15]]
         console.log([timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address])
 
-        await logCheckout([timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], hit_for, "14S40-mJoJ8pZSS7Ot7RWJUOhCBm7r7b-occJnf2A-1Y")
+        const masterSpreadsheetId = process.env.GOOGLE_SHEET_ID_MASTER;
+        const chrisSpreadsheetId = process.env.GOOGLE_SHEET_ID_CHRIS;
+
+        await logCheckout([timestamp, hit_for, sku, shoe, size, order_num, email, proxy, card, profile, address, "In Transit"], hit_for, masterSpreadsheetId)
 
         if (hit_for == "Chris") {
-            await logCheckout([timestamp, sku, shoe, size, order_num, email, address, "In Transit"], "Master", "1yw31vcPjK6bc5gafFP8tiMdyus4HdA9oFXK2Kc6bico")
+            await logCheckout([timestamp, sku, shoe, size, order_num, email, address, "In Transit"], "Master", chrisSpreadsheetId)
         }
 
     }
@@ -167,7 +164,7 @@ client.on('messageCreate', async (msg) => {
 
     if (msg.content.toLowerCase().includes('!deploy') && msg.author.id === client.application.owner.id) {
         msg.reply('Deploying...')
-        let support_command = {
+        const support_command = {
             "name": "support",
             "description": "Respond to customer issues",
             "options": [{
@@ -202,6 +199,47 @@ client.on('messageCreate', async (msg) => {
                 ]
             }]
         }
+        const stock_command = {
+            "name": "stock",
+            "description": "Check our stock levels!",
+            "options": [{
+                "name": "selection",
+                "type": "STRING",
+                "description": "The products you would like to view",
+                "required": true,
+                "choices": [{
+                    "name": "View All",
+                    "value": "view_all"
+                },
+                {
+                    "name": "Gmail",
+                    "value": "gmail"
+                },
+                {
+                    "name": "Nike",
+                    "value": "nike"
+                },
+                {
+                    "name": "Retail",
+                    "value": "retail"
+                },
+                {
+                    "name": "FLX",
+                    "value": "flx"
+                }
+                ]
+            }]
+        }
+        const check_command = {
+            "name": "check",
+            "description": "Check the status of an order",
+            "options": [{
+                "type": 3,
+                "name": "order_id",
+                "description": "Please enter the Order ID",
+                "required": true
+            }]
+        }
         await client.application.commands.create(check_command);
         await client.application.commands.create(support_command);
         await client.application.commands.create(stock_command);
@@ -210,8 +248,9 @@ client.on('messageCreate', async (msg) => {
 
 async function logCheckout(row, sheetName, spreadsheetId) {
 
+    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
     const auth = new google.auth.GoogleAuth({
-        keyFile: "./config/credentials.json",
+        keyFile: credentials,
         scopes: "https://www.googleapis.com/auth/spreadsheets",
     });
     const client = await auth.getClient();
@@ -333,6 +372,14 @@ async function dateCheck(order_id, interaction) {
 }
 
 async function automatedResponse(interaction, user, reason) {
+    const reasons = {
+        "too-long": "Unfortunately because your order is more than 30 days old, we're unable to honor our full replacement warranty. We realize this can be an inconvenience but there are certain factors that occur in the account lifespan that we cannot control. To make up for this, we would like to offer you a discount on replacements to get them significantly cheaper than retail, if this is something you are interested please tag gkline#2534.",
+        "replace-gmail": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+        "reverify-gmail": "A re-verification will be in the works shortly. Please export the effected Gmails in ***AYCD CSV Format*** if possible, and include the proxy you've been using so we can keep the accounts healthy. Please allow up to 48 hours for the re-verification to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+        "replace-amazon": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+        "replace-flx": "A replacement will be in the works shortly. Please allow up to 48 hours for the replacement to be made. If you have any questions, feel free to ask and staff will assist you as soon as possible.",
+        "not-oc": "Unfortunately we generally don't do replacements on our Oneclick Gmails because they're farmed for over a month in most cases and are tested multiple times to ensure they are true Oneclicks. If you would like, staff can look over your farming setup and give you suggestion on how to improve account help. If this is the case, please ping gkline#2534."
+    }
 
     let thisReason = reasons[reason]
     if (reason == "replace-gmail" || reason == "reverify-gmail" || reason == "replace-amazon" || reason == "replace-flx") {
@@ -698,27 +745,6 @@ async function alertSkill(order) {
 
 }
 
-// async function createACOForm(type) {
-//     const auth = new google.auth.GoogleAuth({
-//         keyFile: "../config/credentials.json",
-//         scopes: "https://www.googleapis.com/auth/forms",
-//     });
-//     const client = await auth.getClient();
-//     const googleForms = google.forms({ version: "v4", auth: client });
-//     const formID = "HI";
-//     googleForms.forms.values.append({
-//         auth,
-//         spreadsheetId,
-//         range: "Sheet1!A:A",
-//         valueInputOption: "USER_ENTERED",
-//         resource: {
-//             values: [
-//                 [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
-//             ],
-//         },
-//     });
-// }
-
 async function execute(interaction) {
     await interaction.reply({
         content: `.`,
@@ -738,7 +764,7 @@ const sendTweet = async (msg) => {
         .then(body => {
             return msg.reply(body["message"]);
         }).catch(err => {
-            print(err)
+            console.log(err)
             airbrake.notify(err)
         })
 }

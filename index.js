@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 const console = require('console');
 require("./discordbot/commandbot");
+require("dotenv").config();
 
 const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
@@ -31,152 +32,34 @@ app.get('/', (req, res) => {
 
     res.status(200).sendFile(path.join(__dirname, './public/index.html'));
 
-    // if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
-    //     console.log("Valid Cookie");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    // } else if (req.cookies.id_token == "invalid") {
-    //     console.log("Not in server");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    //     //non_member_index.html
-    // } else {
-    //     console.log("Needs login token");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    //     //loginindex.html
-    // }
-});
-
-app.get('/svelte', (req, res) => {
-
-    res.status(200).sendFile(path.join(__dirname, './project_enigma/index.html'));
-
-    // if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
-    //     console.log("Valid Cookie");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    // } else if (req.cookies.id_token == "invalid") {
-    //     console.log("Not in server");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    //     //non_member_index.html
-    // } else {
-    //     console.log("Needs login token");
-    //     res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
-    //     //loginindex.html
-    // }
+    // Remove branch to enable discord auth / "gated" products
+    if (false) {
+        if (req.cookies.id_token != null && req.cookies.id_token != "invalid") {
+            console.log("Valid Cookie");
+            res.status(200).sendFile(path.join(__dirname, './discordauth/index.html'));
+        } else if (req.cookies.id_token == "invalid") {
+            console.log("Not in server");
+            res.status(200).sendFile(path.join(__dirname, './discordauth/non_member_index.html'));
+        } else {
+            console.log("Needs login token");
+            res.status(200).sendFile(path.join(__dirname, './discordauth/loginindex.html'));
+        }
+    }
 });
 
 app.post('/api/log-order', async (req, res) => {
     try {
-        console.log(await logOrder(req.body))
+        await logOrder(req.body);
         res.sendStatus(201);
 
     } catch {
+        // Return success to not retry
         res.sendStatus(200)
     }
 });
 
-async function logOrder(body) {
-
-
-    if (body.event != "order:paid") {
-        return `Event: ${body.event}`
-    } else {
-
-        let orders = body["data"]["order"]
-        let timestamp = orders["paid_at"]
-        let timeArr = ""
-        let timeArrTwo = ""
-        if (!(timestamp == null)) {
-            timeArr = timestamp.split('T')
-            timeArrTwo = timeArr[1].split(".")
-        }
-
-        let oid = orders["id"]
-        let email = orders["email"]
-        let product = orders["product"]["title"]
-        let quantity = orders["quantity"]
-        let custom_field = "N/A"
-        let price = ((orders["quantity"] * orders["price"]) * 0.971) - 0.3
-
-        if (WHITELIST.includes(product)) {
-            if (orders["custom_fields"].length != 0) {
-                custom_field = orders["custom_fields"][0]["value"]
-
-            }
-
-            switch (product) {
-                case "Forwarded Outlook/Microsoft Accounts":
-
-                    let smsCost = 5 * quantity / await convertCurrency()
-                    payout = (price * .7) - smsCost
-                    break;
-
-                default:
-                    payout = price * .7
-                    break;
-            }
-        }
-
-
-
-        let order = {
-            "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
-            "Order_ID": oid,
-            "Email": email,
-            "Product": product,
-            "Quantity": quantity,
-            "Custom_Field": custom_field,
-            "Price": price,
-            "Payout": payout
-
-        }
-
-        if (WHITELIST.includes(orders.product.title)) {
-
-            const auth = new google.auth.GoogleAuth({
-                keyFile: "./config/credentials.json",
-                scopes: "https://www.googleapis.com/auth/spreadsheets",
-            });
-            const client = await auth.getClient();
-            const googleSheets = google.sheets({ version: "v4", auth: client });
-            const spreadsheetId = "1P-n9CSiuoyCx6BIc4SUAOnBaNCl8RIHUGvHOMuPMfyM";
-            googleSheets.spreadsheets.values.append({
-                auth,
-                spreadsheetId,
-                range: "Sheet1!A:A",
-                valueInputOption: "USER_ENTERED",
-                resource: {
-                    values: [
-                        [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
-                    ],
-                },
-            });
-        }
-
-        return `${body.event}\n${JSON.stringify(order, null, 4)}`
-
-    }
-
-
-}
-async function convertCurrency() {
-    let res = await fetch("https://v6.exchangerate-api.com/v6/a30b11a7bdddf93ddd0c920a/latest/USD")
-    let body = await res.json()
-    let conv = await body.conversion_rates.RUB
-    return conv
-
-}
-process.on('uncaughtException', function (exception) {
-
-    if (exception.code == 503) {
-        console.log("Discord is down")
-    } else {
-        console.log(exception);
-
-    }
-
-});
-
-//app.use('/api/discord', require('./discordauth/discordAuth'));
-// app.use((err, req, res, next) => {
+// app.use('/api/discord', require('./discordauth/discordAuth'));
+// app.use((err, _, res, _) => {
 //     switch (err.message) {
 //         case 'NoCodeProvided':
 //             return res.status(400).send({
@@ -190,3 +73,103 @@ process.on('uncaughtException', function (exception) {
 //             });
 //     }
 // });
+
+process.on('uncaughtException', function (exception) {
+
+    if (exception.code == 503) {
+        console.log("Discord is down")
+    } else {
+        console.log(exception);
+
+    }
+
+});
+
+async function logOrder(body) {
+
+
+    if (body.event != "order:paid") {
+        return `Event: ${body.event}`
+    }
+
+    let orders = body["data"]["order"]
+    let timestamp = orders["paid_at"]
+    let timeArr = ""
+    let timeArrTwo = ""
+    if (!(timestamp == null)) {
+        timeArr = timestamp.split('T')
+        timeArrTwo = timeArr[1].split(".")
+    }
+
+    let oid = orders["id"]
+    let email = orders["email"]
+    let product = orders["product"]["title"]
+    let quantity = orders["quantity"]
+    let custom_field = "N/A"
+    let price = ((orders["quantity"] * orders["price"]) * 0.971) - 0.3
+
+    if (WHITELIST.includes(product)) {
+
+        if (orders["custom_fields"].length != 0) {
+            custom_field = orders["custom_fields"][0]["value"]
+
+        }
+
+        switch (product) {
+            case "Forwarded Outlook/Microsoft Accounts":
+
+                let smsCost = 5 * quantity / await convertCurrency()
+                payout = (price * .7) - smsCost
+                break;
+
+            default:
+                payout = price * .7
+                break;
+        }
+    }
+
+    let order = {
+        "Timestamp": `${timeArr[0]} ${timeArrTwo[0]} `,
+        "Order_ID": oid,
+        "Email": email,
+        "Product": product,
+        "Quantity": quantity,
+        "Custom_Field": custom_field,
+        "Price": price,
+        "Payout": payout
+
+    }
+
+    if (WHITELIST.includes(orders.product.title)) {
+
+        const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+        const spreadsheetId = process.env.ORDER_SHEET_ID;
+        const auth = new google.auth.GoogleAuth({
+            keyFile: credentials,
+            scopes: "https://www.googleapis.com/auth/spreadsheets",
+        });
+        const client = await auth.getClient();
+        const googleSheets = google.sheets({ version: "v4", auth: client });
+
+        googleSheets.spreadsheets.values.append({
+            auth,
+            spreadsheetId,
+            range: "Sheet1!A:A",
+            valueInputOption: "USER_ENTERED",
+            resource: {
+                values: [
+                    [order.Timestamp, order.Order_ID, order.Email, order.Product, order.Custom_Field, order.Quantity, order.Price, payout, "Pending"] //, quantity, note, price
+                ],
+            },
+        });
+    }
+
+    return `${body.event}\n${JSON.stringify(order, null, 4)}`
+}
+
+async function convertCurrency() {
+    let res = await fetch("https://v6.exchangerate-api.com/v6/a30b11a7bdddf93ddd0c920a/latest/USD")
+    let body = await res.json()
+    let conv = await body.conversion_rates.RUB
+    return conv
+}

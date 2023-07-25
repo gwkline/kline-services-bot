@@ -1,12 +1,7 @@
 
-// case "ticket":
-//   print(`Setting up ticket channels for server: ${msg.guild.name}, ID: ${msg.guild.id}`)
-//   return await ticket.ticket_setup(msg.guild)
-
-const Discord = require("discord.js");
-const config = require("../config/config.json");
+const config = require("../config.json");
+const { getRequest } = require("../utils")
 require("dotenv").config();
-const { sendRequest, patchRequest, getRequest, randomArrayShuffle, print, getInfoFromMessage } = require("../utils")
 
 let guild_info = []
 guild_info.ticket_channel = "968016088635945020"
@@ -20,10 +15,6 @@ guild_info.ticket_counter = 1
 //Responsible for checking if the captcha related channels exist in a passed guild
 //If the channels do not exist, they are created
 async function ticket_setup(guild) {
-
-    //Get the guild_info object from the Whop DB
-
-    // //TODO: DELETE LATER
 
     //Once the verification channel ID is known, the embed is sent to it (if it doesn't already exist)
     await sendTicketEmbed(guild, guild_info.ticket_channel)
@@ -70,7 +61,7 @@ async function sendTicketEmbed(guild, ticket_channel) {
             ],
         }
 
-        print("Verification embed not found - creating")
+        console.log("Verification embed not found - creating")
         await guild.channels.cache.get(ticket_channel).send(template)
         return
 
@@ -78,13 +69,13 @@ async function sendTicketEmbed(guild, ticket_channel) {
 
     //If the first message in a channel does not belong to the bot
     else if (ticket_message.author.id != config.WHOP_BOT_ID) {
-        print("Verification embed is set incorrectly. Please make sure nobody else can message in the channel.")
+        console.log("Verification embed is set incorrectly. Please make sure nobody else can message in the channel.")
         return
     }
 
     //If the verification embed is found and belongs to the bot
     else {
-        print("Verification embed is set correctly.")
+        console.log("Verification embed is set correctly.")
         return
     }
 }
@@ -263,14 +254,6 @@ async function accountIssue(interaction) {
     collector.on('end', collected => console.log(`Collected ${collected.size} items`));
 }
 
-async function accountDelivery(interaction) {
-
-}
-
-async function generalQuestion(interaction) {
-
-}
-
 async function closeTicket(interaction) {
     //Get the guild_info object from the Whop DB
     let guild_info = await getRequest(`discord_servers/${interaction.guild.id}`)
@@ -444,6 +427,4 @@ module.exports = {
     deleteTicket,
     q2,
     accountIssue,
-    generalQuestion,
-    accountDelivery,
 }

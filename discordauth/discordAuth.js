@@ -3,13 +3,12 @@ const fetch = require('node-fetch');
 const { catchAsync } = require('../utils');
 const { URLSearchParams } = require('url');
 const dayjs = require('dayjs');
-
 const router = express.Router();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-var verified = false;
 const redirect = encodeURIComponent('http://klineaccounts.com/api/discord/callback');
+var verified = false;
 
 
 router.get('/login', (_, res) => {
@@ -17,9 +16,7 @@ router.get('/login', (_, res) => {
 });
 
 
-router.get('/callback', catchAsync(async(req, res) => {
-
-
+router.get('/callback', catchAsync(async (req, res) => {
     const accessCode = req.query.code;
     if (!accessCode) throw new Error('No access code returned from Discord');
 
@@ -40,15 +37,6 @@ router.get('/callback', catchAsync(async(req, res) => {
     })
 
     token = await response.json()
-
-    /*
-    const fetchDiscordUserInfo = await fetch('http://discordapp.com/api/users/@me', {
-      headers: {
-        authorization: `${token.token_type} ${token.access_token}`,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      }
-    });
-    const userInfo = await fetchDiscordUserInfo.json(); */
 
 
     const getGuilds = await fetch('https://discordapp.com/api/users/@me/guilds', {

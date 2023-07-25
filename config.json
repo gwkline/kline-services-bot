@@ -1,0 +1,13 @@
+{
+  "error": "An error occured. Please try again. If the error persists, please contact support.",
+  "domain": "https://klineaccounts.com",
+  "ticketEmbedTitle": "Support Tickets",
+  "ticketEmbedDescription": "Have a question? We're here to help! React below to open a ticket.",
+  "ticketEmbedColor": "#ff0057",
+  "ticketEmbedImage": "https://i.imgur.com/7XQ0QeN.png",
+  "ticketEmbedThumbnail": "https://i.imgur.com/M5w2jAS.png",
+  "newTicketEmbedTitle": "New Ticket",
+  "newTicketEmbedDescription": "A new ticket has been opened. React below to join the ticket.",
+  "newTicketEmbedColor": "#ff0057",
+  "newTicketEmbedImage": "https://i.imgur.com/7XQ0QeN.png"
+}

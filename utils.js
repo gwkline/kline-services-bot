@@ -1,4 +1,4 @@
-var request = require("request");
+const request = require("request");
 
 const sendRequest = (domain, endpoint, data) => {
     return new Promise((resolve, reject) => {
@@ -11,7 +11,7 @@ const sendRequest = (domain, endpoint, data) => {
             },
         };
 
-        request(options, function(error, response, body) {
+        request(options, function (error, response, body) {
             if (error || body == undefined) return reject(error);
             try {
                 body = JSON.parse(body);
@@ -39,8 +39,6 @@ const sleep = (ms) => {
 const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-
-
 
 module.exports = {
     sendRequest,
