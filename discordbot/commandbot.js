@@ -247,10 +247,9 @@ client.on('messageCreate', async (msg) => {
 });
 
 async function logCheckout(row, sheetName, spreadsheetId) {
-
-    const credentials = JSON.parse(process.env.GOOGLE_CREDENTIALS);
+    const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
     const auth = new google.auth.GoogleAuth({
-        keyFile: credentials,
+        credentials: credentials,
         scopes: "https://www.googleapis.com/auth/spreadsheets",
     });
     const client = await auth.getClient();
@@ -770,7 +769,6 @@ const sendTweet = async (msg) => {
 }
 
 const login = () => {
-
     client.login(process.env.DISCORD_BOT_TOKEN)
 }
 
