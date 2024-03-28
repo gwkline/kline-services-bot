@@ -26,7 +26,7 @@
         "dotenv": "^16.0.0",
         "event-stream": "^4.0.1",
         "exchange-rates-api": "^1.1.0",
-        "express": "^4.17.2",
+        "express": "^4.19.2",
         "fetch": "^1.1.0",
         "fs": "^0.0.1-security",
         "googleapis": "^95.0.0",
